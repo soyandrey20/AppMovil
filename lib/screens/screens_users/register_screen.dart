@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    final usuarioProvider = Provider.of<Usuario_provider>(context);
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
     var txtEmail = TextEditingController();
     var txtEmailConfirm = TextEditingController();
@@ -83,12 +83,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             autocorrect: false,
                             controller: txtName,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'nombre',
-                                labelText: 'nombre',
-                                icon: const Icon(Icons.person)),
+                              hintText: 'nombre',
+                              labelText: 'nombre',
+                              icon: const Icon(Icons.person),
+                            ),
                             validator: (value) {
                               String pattern = r'^[A-Za-z]+';
-                              RegExp regExp = new RegExp(pattern);
+                              RegExp regExp = RegExp(pattern);
                               return regExp.hasMatch(value ?? '')
                                   ? null
                                   : 'Nombre no valido';
@@ -102,12 +103,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             autocorrect: false,
                             controller: txtLastName1,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'Primer apellido',
-                                labelText: 'Primer Apellido',
-                                icon: const Icon(Icons.person)),
+                              hintText: 'Primer apellido',
+                              labelText: 'Primer Apellido',
+                              icon: const Icon(Icons.person),
+                            ),
                             validator: (value) {
                               String pattern = r'^[A-Za-z]+';
-                              RegExp regExp = new RegExp(pattern);
+                              RegExp regExp = RegExp(pattern);
                               return regExp.hasMatch(value ?? '')
                                   ? null
                                   : 'Apellido no valido';
@@ -121,12 +123,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             autocorrect: false,
                             controller: txtLastName2,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'Segundo apellido',
-                                labelText: 'Segundo Apellido',
-                                icon: const Icon(Icons.person)),
+                              hintText: 'Segundo apellido',
+                              labelText: 'Segundo Apellido',
+                              icon: const Icon(Icons.person),
+                            ),
                             validator: (value) {
                               String pattern = r'^[A-Za-z]+';
-                              RegExp regExp = new RegExp(pattern);
+                              RegExp regExp = RegExp(pattern);
                               return regExp.hasMatch(value ?? '')
                                   ? null
                                   : 'Apellido no valido';
@@ -140,14 +143,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             autocorrect: false,
                             controller: txtEmail,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'ejemplo@gmail.com',
-                                labelText: 'Correo',
-                                icon:
-                                    const Icon(Icons.alternate_email_rounded)),
+                              hintText: 'ejemplo@gmail.com',
+                              labelText: 'Correo',
+                              icon: const Icon(Icons.alternate_email_rounded),
+                            ),
                             validator: (value) {
                               String pattern =
                                   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
-                              RegExp regExp = new RegExp(pattern);
+                              RegExp regExp = RegExp(pattern);
                               return regExp.hasMatch(value ?? '')
                                   ? null
                                   : 'Correo no valido';
@@ -161,10 +164,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             autocorrect: false,
                             controller: txtEmailConfirm,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'ejemplo@gmail.com',
-                                labelText: 'Confirmar Correo',
-                                icon:
-                                    const Icon(Icons.alternate_email_rounded)),
+                              hintText: 'ejemplo@gmail.com',
+                              labelText: 'Confirmar Correo',
+                              icon: const Icon(Icons.alternate_email_rounded),
+                            ),
                             validator: (value) {
                               return (txtEmail.text == txtEmailConfirm.text)
                                   ? null
@@ -179,9 +182,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscureText: true,
                             controller: txtPassword,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Digite una contraseña',
-                                icon: const Icon(Icons.lock_outline)),
+                              hintText: '*********',
+                              labelText: 'Digite una contraseña',
+                              icon: const Icon(Icons.lock_outline),
+                            ),
                             validator: (value) {
                               String pattern =
                                   r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
@@ -198,9 +202,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscureText: true,
                             controller: txtPasswordConfirm,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Confirmar contraseña',
-                                icon: const Icon(Icons.lock_outline)),
+                              hintText: '*********',
+                              labelText: 'Confirmar contraseña',
+                              icon: const Icon(Icons.lock_outline),
+                            ),
                             validator: (value) {
                               return (txtPassword.text ==
                                       txtPasswordConfirm.text)
@@ -219,15 +224,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.deepPurple,
                             onPressed: () async {
                               var user = usuarioProvider.usuarios;
-                              var EmailExist = 0;
+                              var emailExist = 0;
 
                               for (var i = 0; i < user.length; i++) {
                                 if (user[i].email == txtEmail.text) {
-                                  EmailExist = 1;
+                                  emailExist = 1;
                                 }
                               }
 
-                              if (EmailExist == 1) {
+                              if (emailExist == 1) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -245,10 +250,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     txtLastName2.text,
                                     txtEmail.text,
                                     txtPassword.text);
-                                EmailExist = 0;
+                                emailExist = 0;
                                 Navigator.pushReplacementNamed(context, 'home');
                               } else {
-                                EmailExist = 0;
+                                emailExist = 0;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -310,8 +315,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromARGB(199, 52, 39, 152),
-            Color.fromARGB(199, 52, 39, 152),
+            Color.fromARGB(255, 74, 167, 239),
+            Color.fromARGB(255, 74, 167, 239),
           ],
         ),
       ),
@@ -322,40 +327,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Positioned(
             top: 90,
             left: 30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -40,
             left: -30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -50,
             right: -20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: -50,
             right: 10,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: 120,
             right: 20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
         ],
       ),
     );
   }
 
-  Container Burbuja() {
+  Container burbuja() {
     return Container(
       width: 100,
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

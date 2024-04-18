@@ -32,10 +32,17 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    Provider.of<Usuario_provider>(context);
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
     var txtPassword = TextEditingController();
     var txtPasswordConfirm = TextEditingController();
+
+    var user = usuarioProvider.usuario;
+
+    var nombre = user.name1;
+    var apellido1 = user.lastName1;
+    var apellido2 = user.lastName2;
+    var email = user.email;
 
     return SingleChildScrollView(
       child: Column(
@@ -78,9 +85,10 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
                             obscureText: true,
                             controller: txtPassword,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Digite nueva contraseña',
-                                icon: const Icon(Icons.lock_outline)),
+                              hintText: '*********',
+                              labelText: 'Digite nueva contraseña',
+                              icon: const Icon(Icons.lock_outline),
+                            ),
                             validator: (value) {
                               String pattern =
                                   r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
@@ -97,9 +105,10 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
                             obscureText: true,
                             controller: txtPasswordConfirm,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Confirmar contraseña',
-                                icon: const Icon(Icons.lock_outline)),
+                              hintText: '*********',
+                              labelText: 'Confirmar contraseña',
+                              icon: const Icon(Icons.lock_outline),
+                            ),
                             validator: (value) {
                               return (txtPassword.text ==
                                       txtPasswordConfirm.text)
@@ -119,13 +128,20 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () {},
+                            onPressed: () {
+                              var password = txtPassword.text;
+                              usuarioProvider.updateUser(nombre, apellido1,
+                                  apellido2, email, password);
+                              Navigator.pushReplacementNamed(context, 'login');
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
-                              child: const Text('Confirmar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: const Text(
+                                'Confirmar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
                             ),
                           ),
                         ],
@@ -176,8 +192,8 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromARGB(199, 52, 39, 152),
-            Color.fromARGB(199, 52, 39, 152),
+            Color.fromARGB(255, 74, 167, 239),
+            Color.fromARGB(255, 74, 167, 239),
           ],
         ),
       ),
@@ -188,40 +204,40 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
           Positioned(
             top: 90,
             left: 30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -40,
             left: -30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -50,
             right: -20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: -50,
             right: 10,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: 120,
             right: 20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
         ],
       ),
     );
   }
 
-  Container Burbuja() {
+  Container burbuja() {
     return Container(
       width: 100,
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

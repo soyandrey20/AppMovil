@@ -1,17 +1,16 @@
 import 'package:empezar/providers/usuario_provider.dart';
 import 'package:empezar/widget/input_decoration.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -33,9 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    final usuarioProvider = Provider.of<Usuario_provider>(context);
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
     var txtEmail = TextEditingController();
-    var txtPassword = TextEditingController();
+    var users = usuarioProvider.usuarios;
 
     return SingleChildScrollView(
       child: Column(
@@ -63,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Text('Login',
+                Text('Recuperar contraseña',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -78,35 +77,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             autocorrect: false,
                             controller: txtEmail,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: 'ejemplo@gmail.com',
-                                labelText: 'Correo',
-                                icon:
-                                    const Icon(Icons.alternate_email_rounded)),
+                              hintText: 'ejemplo@gmail.com',
+                              labelText: 'Correo',
+                              icon: const Icon(Icons.alternate_email_rounded),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
                           ),
                           const SizedBox(
                             height: 40,
-                          ),
-                          TextFormField(
-                            autocorrect: false,
-                            obscureText: true,
-                            controller: txtPassword,
-                            decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'contraseña',
-                                icon: const Icon(Icons.lock_outline)),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, 'forgot_password');
-                              },
-                              child: const Text(
-                                '¿Olvidaste tu contraseña?',
-                                style: TextStyle(color: Colors.blueAccent),
-                              ),
-                            ),
                           ),
                           const SizedBox(
                             height: 10,
@@ -118,34 +98,32 @@ class _LoginScreenState extends State<LoginScreen> {
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
                             onPressed: () {
-                              var user = usuarioProvider.usuarios;
+                              var existingEmail = 0;
+                              var users = usuarioProvider.usuarios;
 
-                              var ExistingAcount = 1;
-
-                              for (var i = 0; i < user.length; i++) {
-                                if (user[i].email == txtEmail.text &&
-                                    user[i].password == txtPassword.text) {
-                                  ExistingAcount = 0;
+                              for (var i = 0; i < users.length; i++) {
+                                if (users[i].email == txtEmail.text) {
+                                  existingEmail = 1;
+                                  usuarioProvider.getUser(users[i].id);
 
                                   break;
-                                } else {
-                                  ExistingAcount = 1;
                                 }
                               }
 
-                              if (ExistingAcount == 0) {
-                                Navigator.pushReplacementNamed(context, 'home');
+                              if (existingEmail == 1) {
+                                Navigator.pushReplacementNamed(
+                                    context, 'restore_password');
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            'Datos incorrectos, intente de nuevo')));
+                                            'Correo no registrado en la base de datos')));
                               }
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
-                              child: const Text('Ingresar',
+                              child: const Text('Cambiar ',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18)),
                             ),
@@ -157,23 +135,41 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 5,
           ),
-          RichText(
-            text: TextSpan(
-              text: '¿No tienes cuenta?',
-              style: const TextStyle(color: Colors.black, fontSize: 15),
-              children: [
-                TextSpan(
-                  text: ' Registrate',
-                  style:
-                      const TextStyle(color: Colors.blueAccent, fontSize: 18),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushReplacementNamed(context, 'register');
-                    },
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: TextButton(
+              onPressed: () {
+                var existingAcount = 1;
+
+                for (var i = 0; i < users.length; i++) {
+                  if (users[i].email == txtEmail.text) {
+                    existingAcount = 0;
+                    usuarioProvider.getUser(users[i].id);
+                    break;
+                  } else {
+                    existingAcount;
+                  }
+                }
+
+                if (existingAcount == 0) {
+                  Navigator.pushReplacementNamed(context, 'login');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Correo no registrado, intente de nuevo'),
+                    ),
+                  );
+                }
+              },
+              child: const Text(
+                'Volver al inicio',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -200,8 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromARGB(199, 52, 39, 152),
-            Color.fromARGB(199, 52, 39, 152),
+            Color.fromARGB(255, 74, 167, 239),
+            Color.fromARGB(255, 74, 167, 239),
           ],
         ),
       ),
@@ -212,40 +208,40 @@ class _LoginScreenState extends State<LoginScreen> {
           Positioned(
             top: 90,
             left: 30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -40,
             left: -30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -50,
             right: -20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: -50,
             right: 10,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: 120,
             right: 20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
         ],
       ),
     );
   }
 
-  Container Burbuja() {
+  Container burbuja() {
     return Container(
       width: 100,
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

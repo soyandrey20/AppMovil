@@ -29,15 +29,15 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 1.6,
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 74, 239, 233),
+                    color: Color.fromARGB(255, 74, 167, 239),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(70),
                     ),
                   ),
-                  child: const Center(
-                    child:
-                        Text("aqui va el icono de la app"), // Icono de la app
-                  ),
+                  child: Container(
+                      // child: Image.asset('assets/images/OIG1.jpeg',
+                      //     width: 10, height: 10)
+                      ),
                 ),
               ],
             ),
@@ -47,7 +47,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 2.666,
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 74, 239, 233),
+                  color: Color.fromARGB(255, 74, 167, 239),
                 ),
               ),
             ),
@@ -89,7 +89,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 60,
+                      height: 40,
                     ),
                     Material(
                       color: const Color(0xFF674AEF),
@@ -102,7 +102,32 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 80),
                           child: const Text(
-                            "Iniciar sesion",
+                            "Usuario",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Material(
+                      color: const Color(0xFF674AEF),
+                      borderRadius: BorderRadius.circular(10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, 'login_admin');
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 80),
+                          child: const Text(
+                            "Administrador",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 22,

@@ -1,16 +1,17 @@
 import 'package:empezar/providers/usuario_provider.dart';
+
 import 'package:empezar/widget/input_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+class HomeScreenAdmin extends StatefulWidget {
+  const HomeScreenAdmin({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<HomeScreenAdmin> createState() => _HomeScreenAdminState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _HomeScreenAdminState extends State<HomeScreenAdmin> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -32,11 +33,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    final usuarioProvider = Provider.of<Usuario_provider>(context);
-    bool ExistingEmail = false;
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
+
     var txtEmail = TextEditingController();
+
     var txtPassword = TextEditingController();
-    var txtPasswordConfirm = TextEditingController();
+
+    var txtName = TextEditingController();
+    var txtLastName1 = TextEditingController();
+    var txtLastName2 = TextEditingController();
+
+    var user = usuarioProvider.usuario;
+    txtName.text = user.name1;
+    txtLastName1.text = user.lastName1;
+    txtLastName2.text = user.lastName2;
+    txtEmail.text = user.email;
+    txtPassword.text = user.password;
 
     return SingleChildScrollView(
       child: Column(
@@ -62,18 +74,73 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 40,
+                  height: 10,
                 ),
-                Text('Recuperar contraseña',
+                Text('Registro',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
-                  height: 40,
+                  height: 10,
                 ),
                 Container(
                   child: Form(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
+                          TextFormField(
+                            keyboardType: TextInputType.name,
+                            autocorrect: false,
+                            controller: txtName,
+                            decoration: InputDecorations.inputDecoration(
+                              hintText: 'nombre',
+                              labelText: 'nombre',
+                              icon: const Icon(Icons.person),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.name,
+                            autocorrect: false,
+                            controller: txtLastName1,
+                            enabled: false,
+                            decoration: InputDecorations.inputDecoration(
+                              hintText: 'Primer apellido',
+                              labelText: 'Primer Apellido',
+                              icon: const Icon(Icons.person),
+                            ),
+                            validator: (value) {
+                              String pattern = r'^[A-Za-z]+';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Apellido no valido';
+                            },
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.name,
+                            autocorrect: false,
+                            controller: txtLastName2,
+                            enabled: false,
+                            decoration: InputDecorations.inputDecoration(
+                              hintText: 'Segundo apellido',
+                              labelText: 'Segundo Apellido',
+                              icon: const Icon(Icons.person),
+                            ),
+                            validator: (value) {
+                              String pattern = r'^[A-Za-z]+';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Apellido no valido';
+                            },
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false,
@@ -83,19 +150,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               labelText: 'Correo',
                               icon: const Icon(Icons.alternate_email_rounded),
                             ),
+                            validator: (value) {
+                              String pattern =
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Correo no valido';
+                            },
+                          ),
+                          const SizedBox(
+                            height: 5,
                           ),
                           const SizedBox(
                             height: 5,
                           ),
                           TextFormField(
-                            enabled: ExistingEmail,
                             autocorrect: false,
                             obscureText: true,
                             controller: txtPassword,
+                            enabled: false,
                             decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Digite nueva contraseña',
-                                icon: const Icon(Icons.lock_outline)),
+                              hintText: '*********',
+                              labelText: 'Digite una contraseña',
+                              icon: const Icon(Icons.lock_outline),
+                            ),
                             validator: (value) {
                               String pattern =
                                   r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
@@ -105,29 +184,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             },
                           ),
                           const SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            enabled: ExistingEmail,
-                            autocorrect: false,
-                            obscureText: true,
-                            controller: txtPasswordConfirm,
-                            decoration: InputDecorations.inputDecoration(
-                                hintText: '*********',
-                                labelText: 'Confirmar contraseña',
-                                icon: const Icon(Icons.lock_outline)),
-                            validator: (value) {
-                              return (txtPassword.text ==
-                                      txtPasswordConfirm.text)
-                                  ? null
-                                  : 'Las contraseñas no coinciden';
-                            },
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
@@ -135,29 +192,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () {
-                              var ExistingEmail = 0;
-                              var user = usuarioProvider.usuarios;
-                              for (var i = 0; i < user.length; i++) {
-                                if (user[i].email == txtEmail.text) {
-                                  ExistingEmail = 1;
-                                }
-                              }
-
-                              if (ExistingEmail == 1) {
-                                Navigator.pushReplacementNamed(
-                                    context, 'restore_password');
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Correo no registrado en la base de datos')));
-                              }
-                            },
+                            onPressed: () async {},
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
-                              child: const Text('Cambiar ',
+                              child: const Text('Actualizar',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18)),
                             ),
@@ -168,20 +207,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
           Align(
-            alignment: Alignment.bottomLeft,
+            alignment: Alignment.topLeft,
             child: TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'login');
+                Navigator.pushReplacementNamed(context, 'information_admin');
               },
               child: const Text(
-                'Volver al inicio',
+                'Regresar',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20,
+                  fontSize: 15,
                 ),
               ),
             ),
@@ -197,7 +233,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         margin: const EdgeInsets.only(top: 30),
         width: double.infinity,
         child: const Icon(
-          Icons.person_pin,
+          Icons.person,
           color: Colors.white,
           size: 100,
         ),
@@ -210,8 +246,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color.fromARGB(199, 52, 39, 152),
-            Color.fromARGB(199, 52, 39, 152),
+            Color.fromARGB(255, 74, 167, 239),
+            Color.fromARGB(255, 74, 167, 239),
           ],
         ),
       ),
@@ -222,40 +258,40 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Positioned(
             top: 90,
             left: 30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -40,
             left: -30,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             top: -50,
             right: -20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: -50,
             right: 10,
-            child: Burbuja(),
+            child: burbuja(),
           ),
           Positioned(
             bottom: 120,
             right: 20,
-            child: Burbuja(),
+            child: burbuja(),
           ),
         ],
       ),
     );
   }
 
-  Container Burbuja() {
+  Container burbuja() {
     return Container(
       width: 100,
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }
