@@ -34,7 +34,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
-    var txtUser = TextEditingController();
+    var txtMail = TextEditingController();
     var txtPassword = TextEditingController();
 
     return SingleChildScrollView(
@@ -74,12 +74,13 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                     child: Column(
                       children: [
                         TextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
-                          controller: txtUser,
+                          controller: txtMail,
                           decoration: InputDecorations.inputDecoration(
-                            hintText: 'Usuario',
-                            labelText: 'Usuario',
-                            icon: const Icon(Icons.person_2),
+                            hintText: 'ejemplo@gmail.com',
+                            labelText: 'Correo',
+                            icon: const Icon(Icons.alternate_email_rounded),
                           ),
                         ),
                         const SizedBox(
@@ -108,21 +109,30 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                             var user = usuarioProvider.usuarios;
 
                             var existingAcount = 1;
+                            var index = 0;
 
-                            for (var i = 0; i < user.length; i++) {
-                              if (user[i].email == txtUser.text &&
-                                  user[i].password == txtPassword.text) {
+                            for (index = 0; index < user.length; index++) {
+                              if (user[index].email == txtMail.text &&
+                                  user[index].password == txtPassword.text) {
                                 existingAcount = 0;
-
                                 break;
                               } else {
                                 existingAcount = 1;
                               }
                             }
 
-                            if (existingAcount == 0) {
+                            if (existingAcount == 0 &&
+                                user[index].permisos == 'Admin') {
                               Navigator.pushReplacementNamed(
                                   context, 'information_admin');
+                            } else if (existingAcount == 0 &&
+                                user[index].permisos != 'Admin') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Permiso denegado, intente de nuevo'),
+                                ),
+                              );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

@@ -192,13 +192,23 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () async {},
+                            onPressed: () async {
+                              usuarioProvider.updateUser(
+                                  txtName.text,
+                                  user.lastName1,
+                                  user.lastName2,
+                                  txtEmail.text,
+                                  user.password);
+                              Navigator.pushReplacementNamed(context, 'login');
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
-                              child: const Text('Actualizar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: const Text(
+                                'Actualizar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
                             ),
                           ),
                         ],

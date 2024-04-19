@@ -39,8 +39,13 @@ class UsuarioProvider with ChangeNotifier {
       'Accept': 'application/json',
     });
     final response = usuarioFromJson(resp.body);
-    usuarios = response;
-    notifyListeners();
+    if (resp.statusCode == 200) {
+      usuarios = response;
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${ulr1}');
+    }
   }
 
   Future<void> getUser(id) async {
@@ -70,7 +75,7 @@ class UsuarioProvider with ChangeNotifier {
   }
 
   Future<void> addUser(String nombre, String apellido1, String apellido2,
-      String email, String password) async {
+      String email, String password, String permisos) async {
     final url1 = Uri.http(urlapi, '/Registros');
 
     final resp = await http.post(url1,
@@ -85,11 +90,15 @@ class UsuarioProvider with ChangeNotifier {
           'LastName_1': apellido1,
           'LastName_2': apellido2,
           'email': email,
-          'password': password
+          'password': password,
+          'Permisos': permisos
         }));
-
-    print(resp.body);
-    notifyListeners();
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+    }
   }
 
   Future<void> updateUser(String nombre, String apellido1, String apellido2,
@@ -110,10 +119,14 @@ class UsuarioProvider with ChangeNotifier {
           'email': email,
           'password': password
         }));
-
-    print(resp.body);
-    notifyListeners();
-    getUsers();
+    if (resp.statusCode == 200) {
+      notifyListeners();
+      usuarios.clear();
+      getUsers();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+    }
   }
 
   Future<void> deleteUser(int id) async {
@@ -124,8 +137,11 @@ class UsuarioProvider with ChangeNotifier {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
-
-    print(resp.body);
-    notifyListeners();
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+    }
   }
 }

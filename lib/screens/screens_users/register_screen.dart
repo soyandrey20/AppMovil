@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var txtName = TextEditingController();
     var txtLastName1 = TextEditingController();
     var txtLastName2 = TextEditingController();
-
+    var permisos = 'usuario';
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -249,7 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     txtLastName1.text,
                                     txtLastName2.text,
                                     txtEmail.text,
-                                    txtPassword.text);
+                                    txtPassword.text,
+                                    permisos);
                                 emailExist = 0;
                                 Navigator.pushReplacementNamed(context, 'home');
                               } else {

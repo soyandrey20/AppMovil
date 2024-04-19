@@ -66,7 +66,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                 child: Column(
                   children: [
                     const Text(
-                      "Aqui va el titulo de la app",
+                      'Ｔｅｃｈｎｏ_ＣｒｏｐＴｉｏｎ',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
@@ -80,7 +80,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
-                        "una breve descripcion de la app o de lo que se trata",
+                        '𝘈𝘯𝘢𝘭𝘪𝘻𝘢 𝘵𝘶 𝘢𝘨𝘶𝘢 𝘺 𝘥𝘦𝘴𝘤𝘶𝘣𝘳𝘦 𝘴𝘶 𝘤𝘢𝘭𝘪𝘥𝘢𝘥 𝘦𝘯 𝘶𝘯 𝘪𝘯𝘴𝘵𝘢𝘯𝘵𝘦',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 17,

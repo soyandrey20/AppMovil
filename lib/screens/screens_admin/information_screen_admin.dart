@@ -188,7 +188,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
             alignment: Alignment.bottomLeft,
             child: TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'login');
+                Navigator.pushReplacementNamed(context, 'login_admin');
               },
               child: const Text(
                 'Volver al inicio',

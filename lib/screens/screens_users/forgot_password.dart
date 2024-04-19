@@ -34,7 +34,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
     var txtEmail = TextEditingController();
-    var users = usuarioProvider.usuarios;
 
     return SingleChildScrollView(
       child: Column(
@@ -141,27 +140,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             alignment: Alignment.bottomLeft,
             child: TextButton(
               onPressed: () {
-                var existingAcount = 1;
-
-                for (var i = 0; i < users.length; i++) {
-                  if (users[i].email == txtEmail.text) {
-                    existingAcount = 0;
-                    usuarioProvider.getUser(users[i].id);
-                    break;
-                  } else {
-                    existingAcount;
-                  }
-                }
-
-                if (existingAcount == 0) {
-                  Navigator.pushReplacementNamed(context, 'login');
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Correo no registrado, intente de nuevo'),
-                    ),
-                  );
-                }
+                Navigator.pushReplacementNamed(context, 'login');
               },
               child: const Text(
                 'Volver al inicio',
