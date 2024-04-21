@@ -99,7 +99,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                                 for (var i = 0; i < users.length; i++) {
                                   if (users[i].email == txtEmail.text) {
                                     existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].id);
+                                    usuarioProvider.getUser(users[i].cedula);
                                     break;
                                   } else {
                                     existingAcount;
@@ -141,7 +141,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                                 for (var i = 0; i < users.length; i++) {
                                   if (users[i].email == txtEmail.text) {
                                     existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].id);
+                                    usuarioProvider.getUser(users[i].cedula);
                                     break;
                                   } else {
                                     existingAcount;
@@ -149,7 +149,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                                 }
 
                                 if (existingAcount == 0) {
-                                  usuarioProvider.deleteUser(users[0].id);
+                                  usuarioProvider.deleteUser(users[0].cedula);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

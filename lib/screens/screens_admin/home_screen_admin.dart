@@ -35,6 +35,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
+    var txtcedula = TextEditingController();
     var txtEmail = TextEditingController();
 
     var txtPassword = TextEditingController();
@@ -44,11 +45,12 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
     var txtLastName2 = TextEditingController();
 
     var user = usuarioProvider.usuario;
-    txtName.text = user.name1;
-    txtLastName1.text = user.lastName1;
-    txtLastName2.text = user.lastName2;
+    txtName.text = user.name_1;
+    txtLastName1.text = user.lastName_1;
+    txtLastName2.text = user.lastName_2;
     txtEmail.text = user.email;
     txtPassword.text = user.password;
+    txtcedula.text = user.cedula;
 
     return SingleChildScrollView(
       child: Column(
@@ -86,6 +88,24 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
+                          TextFormField(
+                            keyboardType: TextInputType.name,
+                            autocorrect: false,
+                            controller: txtcedula,
+                            enabled: false,
+                            decoration: InputDecorations.inputDecoration(
+                              hintText: '00000000',
+                              labelText: '# Cedula',
+                              icon: const Icon(Icons.assignment_ind_outlined),
+                            ),
+                            validator: (value) {
+                              String pattern = r'^[0-9]{10}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : 'Nombre no valido';
+                            },
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.name,
                             autocorrect: false,
@@ -194,9 +214,10 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                             color: Colors.deepPurple,
                             onPressed: () async {
                               usuarioProvider.updateUser(
+                                  user.cedula,
                                   txtName.text,
-                                  user.lastName1,
-                                  user.lastName2,
+                                  user.lastName_1,
+                                  user.lastName_2,
                                   txtEmail.text,
                                   user.password);
                               Navigator.pushReplacementNamed(context, 'login');

@@ -34,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
+    var txtCedula = TextEditingController();
     var txtEmail = TextEditingController();
     var txtEmailConfirm = TextEditingController();
     var txtPassword = TextEditingController();
@@ -78,6 +79,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
+                          TextFormField(
+                            keyboardType: TextInputType.name,
+                            autocorrect: false,
+                            controller: txtCedula,
+                            decoration: InputDecorations.inputDecoration(
+                              hintText: '00000000',
+                              labelText: '# Cedula',
+                              icon: const Icon(Icons.assignment_ind_outlined),
+                            ),
+                            validator: (value) {
+                              String pattern = r'^[0-9]{10}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : '# Cedula no valido';
+                            },
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.name,
                             autocorrect: false,
@@ -225,10 +243,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onPressed: () async {
                               var user = usuarioProvider.usuarios;
                               var emailExist = 0;
+                              var cedulaExist = 0;
 
                               for (var i = 0; i < user.length; i++) {
                                 if (user[i].email == txtEmail.text) {
                                   emailExist = 1;
+                                } else if (user[i].cedula == txtCedula.text) {
+                                  cedulaExist = 1;
                                 }
                               }
 
@@ -239,12 +260,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         'El correo ya se encuentra registrado'),
                                   ),
                                 );
+                              } else if (cedulaExist == 1) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'La cedula ya se encuentra registrada'),
+                                  ),
+                                );
                               } else if (txtEmail.text ==
                                       txtEmailConfirm.text &&
                                   txtPassword.text == txtPasswordConfirm.text &&
                                   txtName.text.isNotEmpty &&
-                                  txtLastName1.text.isNotEmpty) {
+                                  txtLastName1.text.isNotEmpty &&
+                                  cedulaExist == 0 &&
+                                  emailExist == 0) {
                                 await usuarioProvider.addUser(
+                                    txtCedula.text,
                                     txtName.text,
                                     txtLastName1.text,
                                     txtLastName2.text,

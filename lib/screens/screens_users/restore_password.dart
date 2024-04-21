@@ -39,11 +39,11 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
 
     var user = usuarioProvider.usuario;
 
-    var nombre = user.name1;
-    var apellido1 = user.lastName1;
-    var apellido2 = user.lastName2;
+    var nombre = user.name_1;
+    var apellido1 = user.lastName_1;
+    var apellido2 = user.lastName_2;
     var email = user.email;
-
+    var cedula = user.cedula;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -130,8 +130,8 @@ class _RestoretPasswordScreenState extends State<RestoretPasswordScreen> {
                             color: Colors.deepPurple,
                             onPressed: () {
                               var password = txtPassword.text;
-                              usuarioProvider.updateUser(nombre, apellido1,
-                                  apellido2, email, password);
+                              usuarioProvider.updateUser(cedula, nombre,
+                                  apellido1, apellido2, email, password);
                               Navigator.pushReplacementNamed(context, 'login');
                             },
                             child: Container(

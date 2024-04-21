@@ -133,7 +133,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                                       'Permiso denegado, intente de nuevo'),
                                 ),
                               );
-                            } else {
+                            } else if (existingAcount == 1) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text(

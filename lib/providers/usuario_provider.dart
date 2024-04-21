@@ -1,27 +1,25 @@
 import 'dart:convert';
 
 import 'package:empezar/constants.dart';
-import 'package:empezar/models/registro.dart';
-import 'package:empezar/models/usarioo.dart';
-import 'package:empezar/models/usuario.dart';
+import 'package:empezar/models/usario.dart';
+import 'package:empezar/models/usuarios.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 const urlapi = url;
 
 class UsuarioProvider with ChangeNotifier {
-  List<Usuario> usuarios = [];
+  List<Usuarios> usuarios = [];
 
-  List<Registro> registros = [];
-
-  List<Usuarioo> usuarioo = [];
+  List<Usuario> usuarioo = [];
 
   var idd = '';
 
-  Usuarioo usuario = Usuarioo(
-    name1: '',
-    lastName1: '',
-    lastName2: '',
+  Usuario usuario = Usuario(
+    cedula: '',
+    name_1: '',
+    lastName_1: '',
+    lastName_2: '',
     email: '',
     password: '',
   );
@@ -31,16 +29,16 @@ class UsuarioProvider with ChangeNotifier {
   }
 
   Future<void> getUsers() async {
-    final ulr1 = Uri.http(urlapi, '/usuarios');
+    final ulr1 = Uri.http(urlapi, '/Usuarios');
     final resp = await http.get(ulr1, headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-cedentials': 'true',
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
-    final response = usuarioFromJson(resp.body);
+    final res = usuarioFromJson(resp.body);
     if (resp.statusCode == 200) {
-      usuarios = response;
+      usuarios = res;
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
@@ -60,10 +58,10 @@ class UsuarioProvider with ChangeNotifier {
 
     if (resp.statusCode == 200) {
       final response = usuariooFromJson(resp.body);
-
-      usuario.name1 = response.name1;
-      usuario.lastName1 = response.lastName1;
-      usuario.lastName2 = response.lastName2;
+      usuario.cedula = response.cedula;
+      usuario.name_1 = response.name_1;
+      usuario.lastName_1 = response.lastName_1;
+      usuario.lastName_2 = response.lastName_2;
       usuario.email = response.email;
       usuario.password = response.password;
 
@@ -74,9 +72,9 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addUser(String nombre, String apellido1, String apellido2,
-      String email, String password, String permisos) async {
-    final url1 = Uri.http(urlapi, '/Registros');
+  Future<void> addUser(String cedula, String nombre, String apellido1,
+      String apellido2, String email, String password, String permisos) async {
+    final url1 = Uri.http(urlapi, '/Usuarios');
 
     final resp = await http.post(url1,
         headers: {
@@ -86,6 +84,7 @@ class UsuarioProvider with ChangeNotifier {
           'Accept': 'application/json',
         },
         body: jsonEncode({
+          'Cedula': cedula,
           'name_1': nombre,
           'LastName_1': apellido1,
           'LastName_2': apellido2,
@@ -101,9 +100,9 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(String nombre, String apellido1, String apellido2,
-      String email, String password) async {
-    final url1 = Uri.http(urlapi, '/Usuarios/$idd');
+  Future<void> updateUser(String cedula, String nombre, String apellido1,
+      String apellido2, String email, String password) async {
+    final url1 = Uri.http(urlapi, '/Usuarios/$cedula');
     final resp = await http.put(url1,
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -112,7 +111,7 @@ class UsuarioProvider with ChangeNotifier {
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'id': idd,
+          'cedula': cedula,
           'name_1': nombre,
           'LastName_1': apellido1,
           'LastName_2': apellido2,
@@ -129,7 +128,7 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteUser(int id) async {
+  Future<void> deleteUser(String id) async {
     final url1 = Uri.http(urlapi, '/Usuarios/$id');
     final resp = await http.delete(url1, headers: {
       'Access-Control-Allow-Origin': '*',

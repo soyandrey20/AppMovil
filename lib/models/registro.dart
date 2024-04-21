@@ -9,6 +9,7 @@ Registro registroFromJson(String str) => Registro.fromJson(json.decode(str));
 String registroToJson(Registro data) => json.encode(data.toJson());
 
 class Registro {
+  String cedula;
   String name1;
   String lastName1;
   String lastName2;
@@ -17,6 +18,7 @@ class Registro {
   String permisos;
 
   Registro({
+    required this.cedula,
     required this.name1,
     required this.lastName1,
     required this.lastName2,
@@ -26,6 +28,7 @@ class Registro {
   });
 
   factory Registro.fromJson(Map<String, dynamic> json) => Registro(
+        cedula: json["cedula"],
         name1: json["name_1"],
         lastName1: json["LastName_1"],
         lastName2: json["LastName_2"],
@@ -35,6 +38,7 @@ class Registro {
       );
 
   Map<String, dynamic> toJson() => {
+        "cedula": cedula,
         "name_1": name1,
         "LastName_1": lastName1,
         "LastName_2": lastName2,

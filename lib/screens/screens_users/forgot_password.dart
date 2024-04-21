@@ -103,7 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               for (var i = 0; i < users.length; i++) {
                                 if (users[i].email == txtEmail.text) {
                                   existingEmail = 1;
-                                  usuarioProvider.getUser(users[i].id);
+                                  usuarioProvider.getUser(users[i].cedula);
 
                                   break;
                                 }
