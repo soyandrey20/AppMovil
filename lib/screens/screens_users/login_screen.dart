@@ -29,6 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+      appBar: AppBar(
+        title: const Text('Regresar'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'wellcome');
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -158,23 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'wellcome');
-              },
-              child: const Text(
-                'Regresar',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-          ),
           const SizedBox(
-            height: 150,
+            height: 15,
           ),
           RichText(
             text: TextSpan(

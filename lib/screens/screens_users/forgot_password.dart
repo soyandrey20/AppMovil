@@ -28,6 +28,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
+      appBar: AppBar(
+        title: const Text('Regresar'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'login');
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 

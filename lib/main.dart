@@ -1,4 +1,5 @@
 import 'package:empezar/providers/usuario_provider.dart';
+import 'package:empezar/screens/screens_prototipe/sensor_screen.dart';
 import 'package:empezar/screens/screens_users/forgot_password.dart';
 import 'package:empezar/screens/screens_users/home_screen.dart';
 import 'package:empezar/screens/screens_admin/home_screen_admin.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           'login_admin': (_) => const LoginScreenAdmin(),
           'home_admin': (_) => const HomeScreenAdmin(),
           'information_admin': (_) => const InformationScreenAdmin(),
+          'sensor': (_) => const SensorScreen(),
         },
         initialRoute: 'wellcome',
       ),

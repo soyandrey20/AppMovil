@@ -28,6 +28,19 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
           ],
         ),
       ),
+      appBar: AppBar(
+        title: const Text('Regresar'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'wellcome');
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -157,21 +170,6 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
           ),
           const SizedBox(
             height: 20,
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'wellcome');
-              },
-              child: const Text(
-                'Regresar',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
-              ),
-            ),
           ),
         ],
       ),
