@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:empezar/constants.dart';
 import 'package:empezar/models/usario.dart';
 import 'package:empezar/models/usuarios.dart';
@@ -142,5 +141,15 @@ class UsuarioProvider with ChangeNotifier {
       // Manejar el caso en que la solicitud no fue exitosa
       print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
     }
+  }
+
+  Future<void> restorePasword(id) async {
+    final ulr1 = Uri.http(urlapi, '/enviarcorreo/$id');
+    await http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
   }
 }

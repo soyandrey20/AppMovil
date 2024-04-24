@@ -46,7 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-    var txtEmail = TextEditingController();
+    var txtCedula = TextEditingController();
 
     return SingleChildScrollView(
       child: Column(
@@ -85,14 +85,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       child: Column(
                         children: [
                           TextFormField(
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.name,
                             autocorrect: false,
-                            controller: txtEmail,
+                            controller: txtCedula,
                             decoration: InputDecorations.inputDecoration(
-                              hintText: 'ejemplo@gmail.com',
-                              labelText: 'Correo',
-                              icon: const Icon(Icons.alternate_email_rounded),
+                              hintText: '00000000',
+                              labelText: '# Cedula',
+                              icon: const Icon(Icons.assignment_ind_outlined),
                             ),
+                            validator: (value) {
+                              String pattern = r'^[0-9]{10}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : '# Cedula no valido';
+                            },
                           ),
                           const SizedBox(
                             height: 5,
@@ -110,32 +117,41 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
                             onPressed: () {
-                              var existingEmail = 0;
+                              var existingCount = 0;
                               var users = usuarioProvider.usuarios;
 
                               for (var i = 0; i < users.length; i++) {
-                                if (users[i].email == txtEmail.text) {
-                                  existingEmail = 1;
+                                if (users[i].cedula == txtCedula.text) {
+                                  existingCount = 1;
                                   usuarioProvider.getUser(users[i].cedula);
 
                                   break;
                                 }
                               }
 
-                              if (existingEmail == 1) {
+                              if (existingCount == 1) {
+                                usuarioProvider.restorePasword(txtCedula.text);
                                 Navigator.pushReplacementNamed(
-                                    context, 'restore_password');
+                                    context, 'login');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Contraseña enviada al correo'),
+                                  ),
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Correo no registrado en la base de datos')));
+                                  const SnackBar(
+                                    content: Text(
+                                        'Usuario no registrado en la base de datos'),
+                                  ),
+                                );
                               }
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
-                              child: const Text('Cambiar ',
+                              child: const Text('Comfirmar ',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18)),
                             ),
@@ -148,21 +164,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(
             height: 5,
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'login');
-              },
-              child: const Text(
-                'Volver al inicio',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-              ),
-            ),
           ),
         ],
       ),

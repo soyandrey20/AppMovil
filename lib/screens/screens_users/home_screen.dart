@@ -1,7 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:empezar/widget/input_decoration.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -82,11 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    final usuarioProvider = Provider.of<UsuarioProvider>(context);
-
-    var users = usuarioProvider.usuarios;
-    var txtEmail = TextEditingController();
-
     return SingleChildScrollView(
       child: Column(
         children: [

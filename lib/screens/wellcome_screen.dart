@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class WellcomeScreen extends StatefulWidget {
   const WellcomeScreen({super.key});
@@ -34,10 +35,15 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                       bottomRight: Radius.circular(70),
                     ),
                   ),
-                  child: Container(
-                      // child: Image.asset('assets/images/OIG1.jpeg',
-                      //     width: 10, height: 10)
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 500,
+                        width: 300.0,
+                        child: Image.asset('assets/logoo.png'),
                       ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -91,52 +97,55 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Material(
-                      color: const Color(0xFF674AEF),
-                      borderRadius: BorderRadius.circular(10),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, 'login');
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 80),
-                          child: const Text(
-                            "Usuario",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Material(
+                          color: const Color(0xFF674AEF),
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, 'login');
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 30),
+                              child: const Text(
+                                "Usuario",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Material(
-                      color: const Color(0xFF674AEF),
-                      borderRadius: BorderRadius.circular(10),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, 'login_admin');
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 80),
-                          child: const Text(
-                            "Administrador",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
+                        const SizedBox(width: 20),
+                        Material(
+                          color: const Color(0xFF674AEF),
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, 'login_admin');
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 30),
+                              child: const Text(
+                                "Administrador",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),

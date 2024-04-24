@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           'information_admin': (_) => const InformationScreenAdmin(),
           'sensor': (_) => const SensorScreen(),
         },
-        initialRoute: 'wellcome',
+        initialRoute: 'home',
       ),
     );
   }
