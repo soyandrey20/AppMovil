@@ -1,8 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
-import 'package:empezar/widget/input_decoration.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   SingleChildScrollView loginForm(BuildContext context) {
-    var txtEmail = TextEditingController();
+    var txtCedula = TextEditingController();
     var txtPassword = TextEditingController();
 
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
@@ -88,14 +84,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.name,
                             autocorrect: false,
-                            controller: txtEmail,
+                            controller: txtCedula,
                             decoration: InputDecorations.inputDecoration(
-                              hintText: 'ejemplo@gmail.com',
-                              labelText: 'Correo',
-                              icon: const Icon(Icons.alternate_email_rounded),
+                              hintText: '00000000',
+                              labelText: '# Cédula',
+                              icon: const Icon(Icons.assignment_ind_outlined),
                             ),
+                            validator: (value) {
+                              String pattern = r'^[0-9]{10}$';
+                              RegExp regExp = RegExp(pattern);
+                              return regExp.hasMatch(value ?? '')
+                                  ? null
+                                  : '# Cédula no valido';
+                            },
                           ),
                           const SizedBox(
                             height: 40,
@@ -106,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: txtPassword,
                             decoration: InputDecorations.inputDecoration(
                               hintText: '*********',
-                              labelText: 'contraseña',
+                              labelText: 'Contraseña',
                               icon: const Icon(Icons.lock_outline),
                             ),
                           ),
@@ -138,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               var existingAcount = 1;
 
                               for (var i = 0; i < user.length; i++) {
-                                if (user[i].email == txtEmail.text &&
+                                if (user[i].cedula == txtCedula.text &&
                                     user[i].password == txtPassword.text) {
                                   existingAcount = 0;
 

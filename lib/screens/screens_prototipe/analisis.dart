@@ -1,30 +1,39 @@
 import 'package:empezar/importaciones/imports.dart';
+import 'package:intl/intl.dart'; // Importa esta librería para formatear la fecha y hora
 
-class SensorScreen extends StatefulWidget {
-  const SensorScreen({super.key});
+class AnalisisScreen extends StatefulWidget {
+  const AnalisisScreen({super.key});
 
   @override
-  State<SensorScreen> createState() => _SensorScreenState();
+  State<AnalisisScreen> createState() => _AnalisisScreenState();
 }
 
-class _SensorScreenState extends State<SensorScreen> {
-  //definir controladores
-  var txtDescripcion = TextEditingController();
-  String? selectedTipoSensor;
+class _AnalisisScreenState extends State<AnalisisScreen> {
+  late TextEditingController _txtFechaHoraController;
+  var txtEmail = TextEditingController();
+  String? selectedTipoParametro;
 
-  //al cerrar la pantalla se limpian los controladores
+  @override
+  void initState() {
+    super.initState();
+    _txtFechaHoraController = TextEditingController(
+      text: DateFormat('yyyy-MM-dd HH:mm:ss').format(
+        DateTime.now(),
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    txtDescripcion.dispose();
+    _txtFechaHoraController.dispose();
+    txtEmail.dispose();
+
     super.dispose();
   }
 
-//se crea la pantalla
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-//se crea el scaffold
 
     return Scaffold(
       body: Container(
@@ -38,7 +47,6 @@ class _SensorScreenState extends State<SensorScreen> {
           ],
         ),
       ),
-      //se crea el appbar con el titulo y el icono de menu
       appBar: AppBar(
         title: const Text('Home'),
         leading: Builder(
@@ -52,12 +60,10 @@ class _SensorScreenState extends State<SensorScreen> {
           },
         ),
       ),
-      //se crea el drawer con las opciones de la pantalla
       drawer: Drawer(
         child: ListView(
           children: [
             const DrawerHeader(
-              margin: EdgeInsetsDirectional.all(8),
               child: Text('Opciones'),
             ),
             ListTile(
@@ -67,15 +73,15 @@ class _SensorScreenState extends State<SensorScreen> {
               },
             ),
             ListTile(
-              title: const Text('Análisis'),
-              onTap: () {
-                Navigator.pushNamed(context, 'analisis');
-              },
-            ),
-            ListTile(
               title: const Text('Tipo de sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'tipo_sensor');
+              },
+            ),
+            ListTile(
+              title: const Text('Sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'sensor');
               },
             ),
             ListTile(
@@ -85,7 +91,7 @@ class _SensorScreenState extends State<SensorScreen> {
               },
             ),
             ListTile(
-              title: const Text('Parámetro'),
+              title: const Text('Parámetros'),
               onTap: () {
                 Navigator.pushNamed(context, 'parametros');
               },
@@ -102,16 +108,14 @@ class _SensorScreenState extends State<SensorScreen> {
     );
   }
 
-//se crea el formulario de la pantalla
   SingleChildScrollView loginForm(BuildContext context) {
-    //se obtiene el provider
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-//se obtiene los tipos de sensor
-    var tipoSensor = usuarioProvider.tipoSensor;
-//se crea una lista con los tipos de sensor
-    List<String> tipoSensorStrings =
-        tipoSensor.map((sensor) => sensor.descripcion).toList();
-//se crea la pantalla con los campos de texto y los botones
+
+    var tipoParametro = usuarioProvider.tipoParametro;
+
+    List<String> tipoParametroStrings =
+        tipoParametro.map((parametro) => parametro.descripcion).toList();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -138,7 +142,7 @@ class _SensorScreenState extends State<SensorScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Text('Información del sensor',
+                Text('Análisis del agua',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -148,14 +152,58 @@ class _SensorScreenState extends State<SensorScreen> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
-                        //se crea una lista desplegable con los tipos de parámetros
-                        DropdownButtonFormField<String>(
+                        TextFormField(
+                          autocorrect: false,
+                          controller: txtEmail,
                           decoration: InputDecorations.inputDecoration(
-                            hintText: 'Seleccione el tipo de parámetro',
-                            labelText: 'Tipo de parámetro',
+                            hintText: 'sirve para *****',
+                            labelText: 'Información del agua',
                             icon: const Icon(Icons.sensors),
                           ),
-                          items: tipoSensorStrings.map((String value) {
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _txtFechaHoraController,
+                          enabled: false,
+                          decoration: const InputDecoration(
+                            hintText: ' ',
+                            labelText: 'Fecha/hora de la medición',
+                            icon: Icon(Icons.date_range),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (pickedDate != null) {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (pickedTime != null) {
+                                setState(() {
+                                  _txtFechaHoraController.text =
+                                      '${DateFormat('yyyy-MM-dd').format(pickedDate)} ${pickedTime.format(context)}';
+                                });
+                              }
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        DropdownButtonFormField<String>(
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: 'Seleccione el tipo de sensor',
+                            labelText: 'Tipo del parámetro',
+                            icon: const Icon(Icons.sensors),
+                          ),
+                          items: tipoParametroStrings.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -163,28 +211,12 @@ class _SensorScreenState extends State<SensorScreen> {
                           }).toList(),
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedTipoSensor = newValue;
+                              newValue;
                             });
                           },
                         ),
                         const SizedBox(
                           height: 10,
-                        ),
-                        //se crea un campo de texto para la descripción del sensor
-                        TextFormField(
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: 'sirve para *****',
-                            labelText: 'Información del sensor',
-                            icon: const Icon(Icons.sensors),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              txtDescripcion.text = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 25,
                         ),
                         Column(
                           children: [
@@ -194,39 +226,24 @@ class _SensorScreenState extends State<SensorScreen> {
                               ),
                               disabledColor: Colors.grey,
                               color: Colors.deepPurple,
-                              onPressed: () async {
-                                //se obtiene el id del tipo de sensor seleccionado
-                                int id = 1;
-//se recorre la lista de tipos de sensor para obtener el id
-                                for (int i = 0; i < tipoSensor.length; i++) {
-                                  if (tipoSensor[i].descripcion ==
-                                      selectedTipoSensor) {
-                                    id = tipoSensor[i].id;
-                                  }
-                                }
-                                //se agrega el sensor
-                                await usuarioProvider.addSensor(
-                                    txtDescripcion.text, id);
-                                //se redirige a la pantalla de home
-                                Navigator.pushNamed(context, 'home');
-                              },
+                              onPressed: () async {},
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 30, vertical: 12),
                                 child: const Text(
-                                  'Agregar',
+                                  'Analizar',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18),
                                 ),
                               ),
                             ),
                             const SizedBox(
-                              width: 15,
+                              width: 25,
                             ),
                           ],
                         ),
                         const SizedBox(
-                          height: 5,
+                          height: 20,
                         ),
                         RichText(
                           text: TextSpan(

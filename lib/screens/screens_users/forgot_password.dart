@@ -1,7 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
-import 'package:empezar/widget/input_decoration.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});

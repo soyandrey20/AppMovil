@@ -49,27 +49,39 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Opciones'),
             ),
             ListTile(
-              title: const Text('Tipo de sensor'),
+              title: const Text('Análisis'),
               onTap: () {
-                Navigator.pushNamed(context, 'home');
+                Navigator.pushNamed(context, 'analisis');
               },
             ),
             ListTile(
-              title: const Text('Sensores'),
+              title: const Text('Tipo de sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'tipo_sensor');
+              },
+            ),
+            ListTile(
+              title: const Text('Sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'sensor');
               },
             ),
             ListTile(
-              title: const Text('Parámetros'),
+              title: const Text('Tipo de parámetro'),
               onTap: () {
-                Navigator.pushNamed(context, 'register');
+                Navigator.pushNamed(context, 'tipo_parametro');
               },
             ),
             ListTile(
-              title: const Text('Tipo de parámetro'),
+              title: const Text('Parámetro'),
               onTap: () {
-                Navigator.pushNamed(context, 'register');
+                Navigator.pushNamed(context, 'parametros');
+              },
+            ),
+            ListTile(
+              title: const Text('Salir'),
+              onTap: () {
+                Navigator.pushNamed(context, 'login');
               },
             ),
           ],

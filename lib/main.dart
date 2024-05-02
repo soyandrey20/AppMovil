@@ -1,16 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
-import 'package:empezar/screens/screens_prototipe/sensor_screen.dart';
-import 'package:empezar/screens/screens_users/forgot_password.dart';
-import 'package:empezar/screens/screens_users/home_screen.dart';
-import 'package:empezar/screens/screens_admin/home_screen_admin.dart';
-import 'package:empezar/screens/screens_admin/information_screen_admin.dart';
-import 'package:empezar/screens/screens_users/login_screen.dart';
-import 'package:empezar/screens/screens_admin/login_screen_admin.dart';
-import 'package:empezar/screens/screens_users/register_screen.dart';
-import 'package:empezar/screens/screens_users/restore_password.dart';
-import 'package:empezar/screens/wellcome_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,8 +25,14 @@ class MyApp extends StatelessWidget {
           'home_admin': (_) => const HomeScreenAdmin(),
           'information_admin': (_) => const InformationScreenAdmin(),
           'sensor': (_) => const SensorScreen(),
+          'tipo_sensor': (_) => const TipoSensorScreen(),
+          'parametros': (_) => const ParametroScreen(),
+          'tipo_parametro': (_) => const TipoParametroScreen(),
+          'analisis': (_) => const AnalisisScreen(),
+          'eliminar_tss': (_) => const TipoSensorEliminarScreen(),
+          'eliminar_tpp': (_) => const TipoParametroEliminarScreen(),
         },
-        initialRoute: 'home',
+        initialRoute: 'wellcome',
       ),
     );
   }

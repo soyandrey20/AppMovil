@@ -1,13 +1,15 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class InformationScreenAdmin extends StatefulWidget {
-  const InformationScreenAdmin({super.key});
+class TipoParametroEliminarScreen extends StatefulWidget {
+  const TipoParametroEliminarScreen({super.key});
 
   @override
-  State<InformationScreenAdmin> createState() => _InformationScreenAdminState();
+  State<TipoParametroEliminarScreen> createState() =>
+      _TipoParametroEliminarScreenState();
 }
 
-class _InformationScreenAdminState extends State<InformationScreenAdmin> {
+class _TipoParametroEliminarScreenState
+    extends State<TipoParametroEliminarScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -20,7 +22,6 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
         child: Stack(
           children: [
             cajaPurpura(size),
-            iconoPersona(),
             loginForm(context),
           ],
         ),
@@ -32,7 +33,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
             return IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'login_admin');
+                Navigator.pushReplacementNamed(context, 'tipo_parametro');
               },
             );
           },
@@ -44,8 +45,13 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
-    var users = usuarioProvider.usuarios;
-    var txtCedula = TextEditingController();
+    var tipoParametro = usuarioProvider.tipoParametro;
+
+    List<String> tipoParametroStrings =
+        tipoParametro.map((parametro) => parametro.descripcion).toList();
+
+    String? selectedTipoParametro;
+    int? selectedIndex;
 
     return SingleChildScrollView(
       child: Column(
@@ -73,7 +79,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                 const SizedBox(
                   height: 40,
                 ),
-                Text('Información de usuario',
+                Text('¿Desea eliminar el tipo de parametró?',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -83,109 +89,61 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
-                        TextFormField(
-                          keyboardType: TextInputType.name,
-                          autocorrect: false,
-                          controller: txtCedula,
+                        DropdownButtonFormField<String>(
                           decoration: InputDecorations.inputDecoration(
-                            hintText: '00000000',
-                            labelText: '# Cedula',
-                            icon: const Icon(Icons.assignment_ind_outlined),
+                            hintText: 'Seleccione el tipo de parametró',
+                            labelText: 'Seleccione el tipo de parametró',
+                            icon: const Icon(Icons.sensors),
                           ),
-                          validator: (value) {
-                            String pattern = r'^[0-9]{10}$';
-                            RegExp regExp = RegExp(pattern);
-                            return regExp.hasMatch(value ?? '')
-                                ? null
-                                : '# Cedula no valido';
+                          value: selectedTipoParametro,
+                          items: tipoParametroStrings.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedTipoParametro = newValue;
+                              selectedIndex =
+                                  tipoParametroStrings.indexOf(newValue!);
+                            });
                           },
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
-                        Row(
+                        Column(
                           children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              disabledColor: Colors.grey,
-                              color: Colors.deepPurple,
-                              onPressed: () async {
-                                var existingAcount = 1;
-
-                                for (var i = 0; i < users.length; i++) {
-                                  if (users[i].cedula == txtCedula.text) {
-                                    existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].cedula);
-                                    break;
-                                  } else {
-                                    existingAcount;
-                                  }
-                                }
-
-                                if (existingAcount == 0) {
-                                  Navigator.pushReplacementNamed(
-                                      context, 'home_admin');
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Cedula no registrado, intente de nuevo'),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
-                                child: const Text(
-                                  'Buscar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ),
-                            ),
                             const SizedBox(
-                              width: 25,
+                              width: 15,
                             ),
                             MaterialButton(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-
                               disabledColor: Colors.grey,
                               color: Colors.red, // Color de eliminación
-
                               onPressed: () {
-                                var existingAcount = 1;
+                                // usuarioProvider
+                                //     .deleteSensor('sirve para no sirve');
 
-                                for (var i = 0; i < users.length; i++) {
-                                  if (users[i].cedula == txtCedula.text) {
-                                    existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].cedula);
-                                    break;
-                                  } else {
-                                    existingAcount;
-                                  }
-                                }
-
-                                if (existingAcount == 0) {
-                                  usuarioProvider.deleteUser(users[0].cedula);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Cedula no registrado, intente de nuevo'),
-                                    ),
-                                  );
-                                }
+                                // if (selectedTipoParametro == null) {
+                                //   ScaffoldMessenger.of(context).showSnackBar(
+                                //     const SnackBar(
+                                //       content: Text(
+                                //           'Por favor seleccionar un tipo de sensor disponible'),
+                                //     ),
+                                //   );
+                                // } else {
+                                //   usuarioProvider.deleteSensor('yg');
+                                // }
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
+                                    horizontal: 25, vertical: 12),
                                 child: const Text(
-                                  'Eliminar',
+                                  'Confirmar',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18),
                                 ),
@@ -194,7 +152,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                           ],
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                       ],
                     ),
@@ -204,7 +162,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
             ),
           ),
           const SizedBox(
-            height: 5,
+            height: 25,
           ),
         ],
       ),

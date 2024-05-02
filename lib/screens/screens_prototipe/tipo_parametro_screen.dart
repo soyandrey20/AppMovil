@@ -1,30 +1,16 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class SensorScreen extends StatefulWidget {
-  const SensorScreen({super.key});
+class TipoParametroScreen extends StatefulWidget {
+  const TipoParametroScreen({super.key});
 
   @override
-  State<SensorScreen> createState() => _SensorScreenState();
+  State<TipoParametroScreen> createState() => _TipoParametroScreenState();
 }
 
-class _SensorScreenState extends State<SensorScreen> {
-  //definir controladores
-  var txtDescripcion = TextEditingController();
-  String? selectedTipoSensor;
-
-  //al cerrar la pantalla se limpian los controladores
-  @override
-  void dispose() {
-    txtDescripcion.dispose();
-    super.dispose();
-  }
-
-//se crea la pantalla
+class _TipoParametroScreenState extends State<TipoParametroScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-//se crea el scaffold
 
     return Scaffold(
       body: Container(
@@ -38,9 +24,8 @@ class _SensorScreenState extends State<SensorScreen> {
           ],
         ),
       ),
-      //se crea el appbar con el titulo y el icono de menu
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Opciones'),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -52,7 +37,6 @@ class _SensorScreenState extends State<SensorScreen> {
           },
         ),
       ),
-      //se crea el drawer con las opciones de la pantalla
       drawer: Drawer(
         child: ListView(
           children: [
@@ -79,13 +63,13 @@ class _SensorScreenState extends State<SensorScreen> {
               },
             ),
             ListTile(
-              title: const Text('Tipo de parámetro'),
+              title: const Text('sensor'),
               onTap: () {
-                Navigator.pushNamed(context, 'tipo_parametro');
+                Navigator.pushNamed(context, 'sensor');
               },
             ),
             ListTile(
-              title: const Text('Parámetro'),
+              title: const Text('parametro'),
               onTap: () {
                 Navigator.pushNamed(context, 'parametros');
               },
@@ -102,16 +86,11 @@ class _SensorScreenState extends State<SensorScreen> {
     );
   }
 
-//se crea el formulario de la pantalla
   SingleChildScrollView loginForm(BuildContext context) {
-    //se obtiene el provider
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-//se obtiene los tipos de sensor
-    var tipoSensor = usuarioProvider.tipoSensor;
-//se crea una lista con los tipos de sensor
-    List<String> tipoSensorStrings =
-        tipoSensor.map((sensor) => sensor.descripcion).toList();
-//se crea la pantalla con los campos de texto y los botones
+
+    var txtDescripcion = TextEditingController();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -138,7 +117,7 @@ class _SensorScreenState extends State<SensorScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Text('Información del sensor',
+                Text('Tipo de parámetro',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -148,43 +127,17 @@ class _SensorScreenState extends State<SensorScreen> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
-                        //se crea una lista desplegable con los tipos de parámetros
-                        DropdownButtonFormField<String>(
+                        TextFormField(
+                          autocorrect: false,
+                          controller: txtDescripcion,
                           decoration: InputDecorations.inputDecoration(
-                            hintText: 'Seleccione el tipo de parámetro',
-                            labelText: 'Tipo de parámetro',
+                            labelText: 'Información del tipo de parámetro',
                             icon: const Icon(Icons.sensors),
+                            hintText: '',
                           ),
-                          items: tipoSensorStrings.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedTipoSensor = newValue;
-                            });
-                          },
                         ),
                         const SizedBox(
                           height: 10,
-                        ),
-                        //se crea un campo de texto para la descripción del sensor
-                        TextFormField(
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: 'sirve para *****',
-                            labelText: 'Información del sensor',
-                            icon: const Icon(Icons.sensors),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              txtDescripcion.text = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 25,
                         ),
                         Column(
                           children: [
@@ -195,20 +148,28 @@ class _SensorScreenState extends State<SensorScreen> {
                               disabledColor: Colors.grey,
                               color: Colors.deepPurple,
                               onPressed: () async {
-                                //se obtiene el id del tipo de sensor seleccionado
-                                int id = 1;
-//se recorre la lista de tipos de sensor para obtener el id
-                                for (int i = 0; i < tipoSensor.length; i++) {
-                                  if (tipoSensor[i].descripcion ==
-                                      selectedTipoSensor) {
-                                    id = tipoSensor[i].id;
-                                  }
+                                if (txtDescripcion.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Campo vacío'),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Tipo de parametro agregado correctamente'),
+                                    ),
+                                  );
+
+                                  await usuarioProvider
+                                      .addTipeParametro(txtDescripcion.text);
+                                  usuarioProvider.getTipeParameters();
+                                  Navigator.pushReplacementNamed(
+                                      // ignore: use_build_context_synchronously
+                                      context,
+                                      'home');
                                 }
-                                //se agrega el sensor
-                                await usuarioProvider.addSensor(
-                                    txtDescripcion.text, id);
-                                //se redirige a la pantalla de home
-                                Navigator.pushNamed(context, 'home');
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -221,12 +182,52 @@ class _SensorScreenState extends State<SensorScreen> {
                               ),
                             ),
                             const SizedBox(
-                              width: 15,
+                              width: 25,
                             ),
+                            // MaterialButton(
+                            //   shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(10),
+                            //   ),
+                            //   disabledColor: Colors.grey,
+                            //   color: Colors.red, // Color de eliminación
+                            //   onPressed: () {
+                            //     var existingAcount = 1;
+
+                            //     for (var i = 0; i < users.length; i++) {
+                            //       if (users[i].email == txtEmail.text) {
+                            //         existingAcount = 0;
+                            //         usuarioProvider.getUser(users[i].cedula);
+                            //         break;
+                            //       } else {
+                            //         existingAcount;
+                            //       }
+                            //     }
+
+                            //     if (existingAcount == 0) {
+                            //       usuarioProvider.deleteUser(users[0].cedula);
+                            //     } else {
+                            //       ScaffoldMessenger.of(context).showSnackBar(
+                            //         const SnackBar(
+                            //           content: Text(
+                            //               'Correo no registrado, intente de nuevo'),
+                            //         ),
+                            //       );
+                            //     }
+                            //   },
+                            //   child: Container(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 30, vertical: 12),
+                            //     child: const Text(
+                            //       '',
+                            //       style: TextStyle(
+                            //           color: Colors.white, fontSize: 18),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         const SizedBox(
-                          height: 5,
+                          height: 20,
                         ),
                         RichText(
                           text: TextSpan(
@@ -242,7 +243,7 @@ class _SensorScreenState extends State<SensorScreen> {
                                   ..onTap = () {
                                     usuarioProvider.tipoSensor;
                                     Navigator.pushReplacementNamed(
-                                        context, 'eliminar_tss');
+                                        context, 'eliminar_tpp');
                                   },
                               ),
                             ],

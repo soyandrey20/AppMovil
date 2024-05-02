@@ -1,7 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
-import 'package:empezar/widget/input_decoration.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 class LoginScreenAdmin extends StatefulWidget {
   const LoginScreenAdmin({super.key});
@@ -47,7 +44,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
-    var txtMail = TextEditingController();
+    var txtCedula = TextEditingController();
     var txtPassword = TextEditingController();
 
     return SingleChildScrollView(
@@ -87,14 +84,21 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                     child: Column(
                       children: [
                         TextFormField(
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.name,
                           autocorrect: false,
-                          controller: txtMail,
+                          controller: txtCedula,
                           decoration: InputDecorations.inputDecoration(
-                            hintText: 'ejemplo@gmail.com',
-                            labelText: 'Correo',
-                            icon: const Icon(Icons.alternate_email_rounded),
+                            hintText: '00000000',
+                            labelText: '# Cedula',
+                            icon: const Icon(Icons.assignment_ind_outlined),
                           ),
+                          validator: (value) {
+                            String pattern = r'^[0-9]{10}$';
+                            RegExp regExp = RegExp(pattern);
+                            return regExp.hasMatch(value ?? '')
+                                ? null
+                                : '# Cédula no válido';
+                          },
                         ),
                         const SizedBox(
                           height: 40,
@@ -105,7 +109,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                           controller: txtPassword,
                           decoration: InputDecorations.inputDecoration(
                             hintText: '*********',
-                            labelText: 'contraseña',
+                            labelText: 'Contraseña',
                             icon: const Icon(Icons.lock_outline),
                           ),
                         ),
@@ -125,7 +129,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                             var index = 0;
 
                             for (index = 0; index < user.length; index++) {
-                              if (user[index].email == txtMail.text &&
+                              if (user[index].cedula == txtCedula.text &&
                                   user[index].password == txtPassword.text) {
                                 existingAcount = 0;
                                 break;
@@ -136,6 +140,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
 
                             if (existingAcount == 0 &&
                                 user[index].permisos == 'Admin') {
+                              usuarioProvider.getUsers();
                               Navigator.pushReplacementNamed(
                                   context, 'information_admin');
                             } else if (existingAcount == 0 &&

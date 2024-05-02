@@ -1,7 +1,4 @@
-import 'package:empezar/providers/usuario_provider.dart';
-import 'package:empezar/widget/input_decoration.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 class HomeScreenAdmin extends StatefulWidget {
   const HomeScreenAdmin({super.key});
@@ -28,6 +25,19 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
           ],
         ),
       ),
+      appBar: AppBar(
+        title: const Text('Regresar'),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'information_admin');
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -44,6 +54,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
     var txtLastName2 = TextEditingController();
 
     var user = usuarioProvider.usuario;
+
     txtName.text = user.name_1;
     txtLastName1.text = user.lastName_1;
     txtLastName2.text = user.lastName_2;
@@ -55,7 +66,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
       child: Column(
         children: [
           const SizedBox(
-            height: 250,
+            height: 200,
           ),
           Container(
             padding: const EdgeInsets.all(20),
@@ -77,7 +88,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Registro',
+                Text('Informacion del usuario',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 10,
@@ -235,21 +246,6 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                       )),
                 )
               ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'information_admin');
-              },
-              child: const Text(
-                'Regresar',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
-              ),
             ),
           ),
         ],

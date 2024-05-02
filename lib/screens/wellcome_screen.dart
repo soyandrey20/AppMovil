@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class WellcomeScreen extends StatefulWidget {
   const WellcomeScreen({super.key});
@@ -40,7 +39,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                       SizedBox(
                         height: 500,
                         width: 300.0,
-                        child: Image.asset('assets/logoo.png'),
+                        child: Image.asset('assets/si.png'),
                       ),
                     ],
                   ),
