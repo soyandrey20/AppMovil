@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
           'analisis': (_) => const AnalisisScreen(),
           'eliminar_tss': (_) => const TipoSensorEliminarScreen(),
           'eliminar_tpp': (_) => const TipoParametroEliminarScreen(),
+          'para_sensor': (_) => const ParaSensorScreen(),
         },
         initialRoute: 'wellcome',
       ),

@@ -1,4 +1,5 @@
 import 'package:empezar/importaciones/imports.dart';
+
 import 'package:http/http.dart' as http;
 
 const urlapi = url;
@@ -11,6 +12,8 @@ class UsuarioProvider with ChangeNotifier {
   List<TipoParametro> tipoSensor = [];
 
   List<Usuario> usuarioo = [];
+
+  List<ParametroSensor> paraSensor = [];
 
   var idd = '';
 
@@ -27,6 +30,7 @@ class UsuarioProvider with ChangeNotifier {
     getUsers();
     getTipeParameters();
     getTipeSensors();
+    getParaSensors();
   }
 
   Future<void> getUsers() async {
@@ -43,7 +47,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${ulr1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
     }
   }
 
@@ -69,7 +75,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${ulr1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
     }
   }
 
@@ -97,7 +105,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -125,7 +135,9 @@ class UsuarioProvider with ChangeNotifier {
       getUsers();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -141,7 +153,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -172,7 +186,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -191,7 +207,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${ulr1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
     }
   }
 
@@ -212,7 +230,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -231,7 +251,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${ulr1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
     }
   }
 
@@ -247,7 +269,9 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
     }
   }
 
@@ -269,7 +293,54 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
-      print('Error en la solicitud: ${resp.statusCode} ${resp.body} ${url1}');
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
+    }
+  }
+
+  Future<void> addParaSensor(int idSensor, int idParametro) async {
+    final url1 = Uri.http(urlapi, '/parametro_sensor');
+
+    final resp = await http.post(url1,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-cedentials': 'true',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'id_sensor': idSensor,
+          'id_parametro': idParametro,
+        }));
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
+    }
+  }
+
+  Future<void> getParaSensors() async {
+    final ulr1 = Uri.http(urlapi, '/parametro_sensor');
+    final resp = await http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+    final res = parametroSensorFromJson(resp.body);
+    if (resp.statusCode == 200) {
+      paraSensor.clear();
+      paraSensor = res;
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
     }
   }
 }

@@ -122,135 +122,133 @@ class _TipoParametroScreenState extends State<TipoParametroScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Container(
-                  child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          autocorrect: false,
-                          controller: txtDescripcion,
-                          decoration: InputDecorations.inputDecoration(
-                            labelText: 'Información del tipo de parámetro',
-                            icon: const Icon(Icons.sensors),
-                            hintText: '',
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        autocorrect: false,
+                        controller: txtDescripcion,
+                        decoration: InputDecorations.inputDecoration(
+                          labelText: 'Información del tipo de parámetro',
+                          icon: const Icon(Icons.sensors),
+                          hintText: '',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            disabledColor: Colors.grey,
+                            color: Colors.deepPurple,
+                            onPressed: () async {
+                              if (txtDescripcion.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Campo vacío'),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Tipo de parametro agregado correctamente'),
+                                  ),
+                                );
+
+                                await usuarioProvider
+                                    .addTipeParametro(txtDescripcion.text);
+                                usuarioProvider.getTipeParameters();
+                                Navigator.pushReplacementNamed(
+                                    // ignore: use_build_context_synchronously
+                                    context,
+                                    'home');
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 12),
+                              child: const Text(
+                                'Agregar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Column(
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          // MaterialButton(
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(10),
+                          //   ),
+                          //   disabledColor: Colors.grey,
+                          //   color: Colors.red, // Color de eliminación
+                          //   onPressed: () {
+                          //     var existingAcount = 1;
+
+                          //     for (var i = 0; i < users.length; i++) {
+                          //       if (users[i].email == txtEmail.text) {
+                          //         existingAcount = 0;
+                          //         usuarioProvider.getUser(users[i].cedula);
+                          //         break;
+                          //       } else {
+                          //         existingAcount;
+                          //       }
+                          //     }
+
+                          //     if (existingAcount == 0) {
+                          //       usuarioProvider.deleteUser(users[0].cedula);
+                          //     } else {
+                          //       ScaffoldMessenger.of(context).showSnackBar(
+                          //         const SnackBar(
+                          //           content: Text(
+                          //               'Correo no registrado, intente de nuevo'),
+                          //         ),
+                          //       );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     padding: const EdgeInsets.symmetric(
+                          //         horizontal: 30, vertical: 12),
+                          //     child: const Text(
+                          //       '',
+                          //       style: TextStyle(
+                          //           color: Colors.white, fontSize: 18),
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '¿Deseas eliminar?',
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 15),
                           children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              disabledColor: Colors.grey,
-                              color: Colors.deepPurple,
-                              onPressed: () async {
-                                if (txtDescripcion.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Campo vacío'),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Tipo de parametro agregado correctamente'),
-                                    ),
-                                  );
-
-                                  await usuarioProvider
-                                      .addTipeParametro(txtDescripcion.text);
-                                  usuarioProvider.getTipeParameters();
+                            TextSpan(
+                              text: ' Click aquí',
+                              style: const TextStyle(
+                                  color: Colors.blue, fontSize: 18),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  usuarioProvider.tipoSensor;
                                   Navigator.pushReplacementNamed(
-                                      // ignore: use_build_context_synchronously
-                                      context,
-                                      'home');
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
-                                child: const Text(
-                                  'Agregar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ),
+                                      context, 'eliminar_tpp');
+                                },
                             ),
-                            const SizedBox(
-                              width: 25,
-                            ),
-                            // MaterialButton(
-                            //   shape: RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(10),
-                            //   ),
-                            //   disabledColor: Colors.grey,
-                            //   color: Colors.red, // Color de eliminación
-                            //   onPressed: () {
-                            //     var existingAcount = 1;
-
-                            //     for (var i = 0; i < users.length; i++) {
-                            //       if (users[i].email == txtEmail.text) {
-                            //         existingAcount = 0;
-                            //         usuarioProvider.getUser(users[i].cedula);
-                            //         break;
-                            //       } else {
-                            //         existingAcount;
-                            //       }
-                            //     }
-
-                            //     if (existingAcount == 0) {
-                            //       usuarioProvider.deleteUser(users[0].cedula);
-                            //     } else {
-                            //       ScaffoldMessenger.of(context).showSnackBar(
-                            //         const SnackBar(
-                            //           content: Text(
-                            //               'Correo no registrado, intente de nuevo'),
-                            //         ),
-                            //       );
-                            //     }
-                            //   },
-                            //   child: Container(
-                            //     padding: const EdgeInsets.symmetric(
-                            //         horizontal: 30, vertical: 12),
-                            //     child: const Text(
-                            //       '',
-                            //       style: TextStyle(
-                            //           color: Colors.white, fontSize: 18),
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: '¿Deseas eliminar?',
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15),
-                            children: [
-                              TextSpan(
-                                text: ' Click aquí',
-                                style: const TextStyle(
-                                    color: Colors.blue, fontSize: 18),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    usuarioProvider.tipoSensor;
-                                    Navigator.pushReplacementNamed(
-                                        context, 'eliminar_tpp');
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -260,75 +258,6 @@ class _TipoParametroScreenState extends State<TipoParametroScreen> {
             height: 5,
           ),
         ],
-      ),
-    );
-  }
-
-  SafeArea iconoPersona() {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 30),
-        width: double.infinity,
-        child: const Icon(
-          Icons.person_pin,
-          color: Colors.white,
-          size: 100,
-        ),
-      ),
-    );
-  }
-
-  Container cajaPurpura(Size size) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 74, 167, 239),
-            Color.fromARGB(255, 74, 167, 239),
-          ],
-        ),
-      ),
-      width: double.infinity,
-      height: size.height * 0.4,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 90,
-            left: 30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -40,
-            left: -30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -50,
-            right: -20,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: -50,
-            right: 10,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: 120,
-            right: 20,
-            child: burbuja(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container burbuja() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

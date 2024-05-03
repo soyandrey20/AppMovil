@@ -135,106 +135,106 @@ class _ParametroScreenState extends State<ParametroScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Container(
-                  child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: 'Seleccione el tipo de parámetro',
-                            labelText: 'Tipo de parámetro',
-                            icon: const Icon(Icons.sensors),
-                          ),
-                          value: selectedTipoParametro,
-                          items: tipoParametroStrings.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            selectedTipoParametro = newValue;
-                          },
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecorations.inputDecoration(
+                          hintText: 'Seleccione el tipo de parámetro',
+                          labelText: 'Tipo de parámetro',
+                          icon: const Icon(Icons.sensors),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        value: selectedTipoParametro,
+                        items: tipoParametroStrings.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          selectedTipoParametro = newValue;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        autocorrect: false,
+                        controller: txtRangoInferior,
+                        decoration: InputDecorations.inputDecoration(
+                          hintText: ' ',
+                          labelText: 'Rango inferior',
+                          icon: const Icon(Icons.sensors),
                         ),
-                        TextFormField(
-                          autocorrect: false,
-                          controller: txtRangoInferior,
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: ' ',
-                            labelText: 'Rango inferior',
-                            icon: const Icon(Icons.sensors),
-                          ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        autocorrect: false,
+                        controller: txtRangoSuperior,
+                        decoration: InputDecorations.inputDecoration(
+                          hintText: ' ',
+                          labelText: 'Rango superior',
+                          icon: const Icon(Icons.sensors),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          autocorrect: false,
-                          controller: txtRangoSuperior,
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: ' ',
-                            labelText: 'Rango superior',
-                            icon: const Icon(Icons.sensors),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              disabledColor: Colors.grey,
-                              color: Colors.deepPurple,
-                              onPressed: () async {
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            disabledColor: Colors.grey,
+                            color: Colors.deepPurple,
+                            onPressed: () async {
+                              if (kDebugMode) {
                                 print(selectedTipoParametro);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
-                                child: const Text(
-                                  'Buscar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 12),
+                              child: const Text(
+                                'Buscar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
                               ),
                             ),
-                            const SizedBox(
-                              width: 25,
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '¿Deseas eliminar?',
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 15),
+                          children: [
+                            TextSpan(
+                              text: ' Click aquí',
+                              style: const TextStyle(
+                                  color: Colors.blue, fontSize: 18),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  usuarioProvider.tipoSensor;
+                                  Navigator.pushReplacementNamed(
+                                      context, 'eliminar_tss');
+                                },
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: '¿Deseas eliminar?',
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 15),
-                            children: [
-                              TextSpan(
-                                text: ' Click aquí',
-                                style: const TextStyle(
-                                    color: Colors.blue, fontSize: 18),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    usuarioProvider.tipoSensor;
-                                    Navigator.pushReplacementNamed(
-                                        context, 'eliminar_tss');
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -244,75 +244,6 @@ class _ParametroScreenState extends State<ParametroScreen> {
             height: 5,
           ),
         ],
-      ),
-    );
-  }
-
-  SafeArea iconoPersona() {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 30),
-        width: double.infinity,
-        child: const Icon(
-          Icons.person_pin,
-          color: Colors.white,
-          size: 100,
-        ),
-      ),
-    );
-  }
-
-  Container cajaPurpura(Size size) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 74, 167, 239),
-            Color.fromARGB(255, 74, 167, 239),
-          ],
-        ),
-      ),
-      width: double.infinity,
-      height: size.height * 0.4,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 90,
-            left: 30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -40,
-            left: -30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -50,
-            right: -20,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: -50,
-            right: 10,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: 120,
-            right: 20,
-            child: burbuja(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container burbuja() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

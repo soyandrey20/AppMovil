@@ -78,126 +78,124 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                 const SizedBox(
                   height: 40,
                 ),
-                Container(
-                  child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          keyboardType: TextInputType.name,
-                          autocorrect: false,
-                          controller: txtCedula,
-                          decoration: InputDecorations.inputDecoration(
-                            hintText: '00000000',
-                            labelText: '# Cedula',
-                            icon: const Icon(Icons.assignment_ind_outlined),
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.name,
+                        autocorrect: false,
+                        controller: txtCedula,
+                        decoration: InputDecorations.inputDecoration(
+                          hintText: '00000000',
+                          labelText: '# Cedula',
+                          icon: const Icon(Icons.assignment_ind_outlined),
+                        ),
+                        validator: (value) {
+                          String pattern = r'^[0-9]{10}$';
+                          RegExp regExp = RegExp(pattern);
+                          return regExp.hasMatch(value ?? '')
+                              ? null
+                              : '# Cedula no valido';
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            disabledColor: Colors.grey,
+                            color: Colors.deepPurple,
+                            onPressed: () async {
+                              var existingAcount = 1;
+
+                              for (var i = 0; i < users.length; i++) {
+                                if (users[i].cedula == txtCedula.text) {
+                                  existingAcount = 0;
+                                  usuarioProvider.getUser(users[i].cedula);
+                                  break;
+                                } else {
+                                  existingAcount;
+                                }
+                              }
+
+                              if (existingAcount == 0) {
+                                Navigator.pushReplacementNamed(
+                                    context, 'home_admin');
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Cedula no registrado, intente de nuevo'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 12),
+                              child: const Text(
+                                'Buscar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
                           ),
-                          validator: (value) {
-                            String pattern = r'^[0-9]{10}$';
-                            RegExp regExp = RegExp(pattern);
-                            return regExp.hasMatch(value ?? '')
-                                ? null
-                                : '# Cedula no valido';
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              disabledColor: Colors.grey,
-                              color: Colors.deepPurple,
-                              onPressed: () async {
-                                var existingAcount = 1;
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
 
-                                for (var i = 0; i < users.length; i++) {
-                                  if (users[i].cedula == txtCedula.text) {
-                                    existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].cedula);
-                                    break;
-                                  } else {
-                                    existingAcount;
-                                  }
-                                }
+                            disabledColor: Colors.grey,
+                            color: Colors.red, // Color de eliminación
 
-                                if (existingAcount == 0) {
-                                  Navigator.pushReplacementNamed(
-                                      context, 'home_admin');
+                            onPressed: () {
+                              var existingAcount = 1;
+
+                              for (var i = 0; i < users.length; i++) {
+                                if (users[i].cedula == txtCedula.text) {
+                                  existingAcount = 0;
+                                  usuarioProvider.getUser(users[i].cedula);
+                                  break;
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Cedula no registrado, intente de nuevo'),
-                                    ),
-                                  );
+                                  existingAcount;
                                 }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
-                                child: const Text(
-                                  'Buscar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
+                              }
+
+                              if (existingAcount == 0) {
+                                usuarioProvider.deleteUser(users[0].cedula);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Cedula no registrado, intente de nuevo'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 12),
+                              child: const Text(
+                                'Eliminar',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
                               ),
                             ),
-                            const SizedBox(
-                              width: 25,
-                            ),
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-
-                              disabledColor: Colors.grey,
-                              color: Colors.red, // Color de eliminación
-
-                              onPressed: () {
-                                var existingAcount = 1;
-
-                                for (var i = 0; i < users.length; i++) {
-                                  if (users[i].cedula == txtCedula.text) {
-                                    existingAcount = 0;
-                                    usuarioProvider.getUser(users[i].cedula);
-                                    break;
-                                  } else {
-                                    existingAcount;
-                                  }
-                                }
-
-                                if (existingAcount == 0) {
-                                  usuarioProvider.deleteUser(users[0].cedula);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Cedula no registrado, intente de nuevo'),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 12),
-                                child: const Text(
-                                  'Eliminar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -207,75 +205,6 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
             height: 5,
           ),
         ],
-      ),
-    );
-  }
-
-  SafeArea iconoPersona() {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 30),
-        width: double.infinity,
-        child: const Icon(
-          Icons.person_pin,
-          color: Colors.white,
-          size: 100,
-        ),
-      ),
-    );
-  }
-
-  Container cajaPurpura(Size size) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 74, 167, 239),
-            Color.fromARGB(255, 74, 167, 239),
-          ],
-        ),
-      ),
-      width: double.infinity,
-      height: size.height * 0.4,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 90,
-            left: 30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -40,
-            left: -30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -50,
-            right: -20,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: -50,
-            right: 10,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: 120,
-            right: 20,
-            child: burbuja(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container burbuja() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

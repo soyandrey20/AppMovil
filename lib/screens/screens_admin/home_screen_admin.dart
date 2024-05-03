@@ -93,231 +93,160 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            autocorrect: false,
-                            controller: txtcedula,
-                            enabled: false,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: '00000000',
-                              labelText: '# Cedula',
-                              icon: const Icon(Icons.assignment_ind_outlined),
-                            ),
-                            validator: (value) {
-                              String pattern = r'^[0-9]{10}$';
-                              RegExp regExp = RegExp(pattern);
-                              return regExp.hasMatch(value ?? '')
-                                  ? null
-                                  : 'Nombre no valido';
-                            },
+                Form(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.name,
+                          autocorrect: false,
+                          controller: txtcedula,
+                          enabled: false,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: '00000000',
+                            labelText: '# Cedula',
+                            icon: const Icon(Icons.assignment_ind_outlined),
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            autocorrect: false,
-                            controller: txtName,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: 'nombre',
-                              labelText: 'nombre',
-                              icon: const Icon(Icons.person),
-                            ),
+                          validator: (value) {
+                            String pattern = r'^[0-9]{10}$';
+                            RegExp regExp = RegExp(pattern);
+                            return regExp.hasMatch(value ?? '')
+                                ? null
+                                : 'Nombre no valido';
+                          },
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.name,
+                          autocorrect: false,
+                          controller: txtName,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: 'nombre',
+                            labelText: 'nombre',
+                            icon: const Icon(Icons.person),
                           ),
-                          const SizedBox(
-                            height: 5,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.name,
+                          autocorrect: false,
+                          controller: txtLastName1,
+                          enabled: false,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: 'Primer apellido',
+                            labelText: 'Primer Apellido',
+                            icon: const Icon(Icons.person),
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            autocorrect: false,
-                            controller: txtLastName1,
-                            enabled: false,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: 'Primer apellido',
-                              labelText: 'Primer Apellido',
-                              icon: const Icon(Icons.person),
-                            ),
-                            validator: (value) {
-                              String pattern = r'^[A-Za-z]+';
-                              RegExp regExp = RegExp(pattern);
-                              return regExp.hasMatch(value ?? '')
-                                  ? null
-                                  : 'Apellido no valido';
-                            },
+                          validator: (value) {
+                            String pattern = r'^[A-Za-z]+';
+                            RegExp regExp = RegExp(pattern);
+                            return regExp.hasMatch(value ?? '')
+                                ? null
+                                : 'Apellido no valido';
+                          },
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.name,
+                          autocorrect: false,
+                          controller: txtLastName2,
+                          enabled: false,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: 'Segundo apellido',
+                            labelText: 'Segundo Apellido',
+                            icon: const Icon(Icons.person),
                           ),
-                          const SizedBox(
-                            height: 5,
+                          validator: (value) {
+                            String pattern = r'^[A-Za-z]+';
+                            RegExp regExp = RegExp(pattern);
+                            return regExp.hasMatch(value ?? '')
+                                ? null
+                                : 'Apellido no valido';
+                          },
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          autocorrect: false,
+                          controller: txtEmail,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: 'ejemplo@gmail.com',
+                            labelText: 'Correo',
+                            icon: const Icon(Icons.alternate_email_rounded),
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.name,
-                            autocorrect: false,
-                            controller: txtLastName2,
-                            enabled: false,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: 'Segundo apellido',
-                              labelText: 'Segundo Apellido',
-                              icon: const Icon(Icons.person),
-                            ),
-                            validator: (value) {
-                              String pattern = r'^[A-Za-z]+';
-                              RegExp regExp = RegExp(pattern);
-                              return regExp.hasMatch(value ?? '')
-                                  ? null
-                                  : 'Apellido no valido';
-                            },
+                          validator: (value) {
+                            String pattern =
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
+                            RegExp regExp = RegExp(pattern);
+                            return regExp.hasMatch(value ?? '')
+                                ? null
+                                : 'Correo no valido';
+                          },
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          autocorrect: false,
+                          obscureText: true,
+                          controller: txtPassword,
+                          enabled: false,
+                          decoration: InputDecorations.inputDecoration(
+                            hintText: '*********',
+                            labelText: 'Digite una contraseña',
+                            icon: const Icon(Icons.lock_outline),
                           ),
-                          const SizedBox(
-                            height: 5,
+                          validator: (value) {
+                            String pattern =
+                                r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
+                            return RegExp(pattern).hasMatch(value ?? '')
+                                ? null
+                                : 'La contraseña debe tener al menos 8 caracteres';
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            autocorrect: false,
-                            controller: txtEmail,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: 'ejemplo@gmail.com',
-                              labelText: 'Correo',
-                              icon: const Icon(Icons.alternate_email_rounded),
-                            ),
-                            validator: (value) {
-                              String pattern =
-                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
-                              RegExp regExp = RegExp(pattern);
-                              return regExp.hasMatch(value ?? '')
-                                  ? null
-                                  : 'Correo no valido';
-                            },
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            autocorrect: false,
-                            obscureText: true,
-                            controller: txtPassword,
-                            enabled: false,
-                            decoration: InputDecorations.inputDecoration(
-                              hintText: '*********',
-                              labelText: 'Digite una contraseña',
-                              icon: const Icon(Icons.lock_outline),
-                            ),
-                            validator: (value) {
-                              String pattern =
-                                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$';
-                              return RegExp(pattern).hasMatch(value ?? '')
-                                  ? null
-                                  : 'La contraseña debe tener al menos 8 caracteres';
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            disabledColor: Colors.grey,
-                            color: Colors.deepPurple,
-                            onPressed: () async {
-                              usuarioProvider.updateUser(
-                                  user.cedula,
-                                  txtName.text,
-                                  user.lastName_1,
-                                  user.lastName_2,
-                                  txtEmail.text,
-                                  user.password);
-                              Navigator.pushReplacementNamed(context, 'login');
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 12),
-                              child: const Text(
-                                'Actualizar',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
+                          disabledColor: Colors.grey,
+                          color: Colors.deepPurple,
+                          onPressed: () async {
+                            usuarioProvider.updateUser(
+                                user.cedula,
+                                txtName.text,
+                                user.lastName_1,
+                                user.lastName_2,
+                                txtEmail.text,
+                                user.password);
+                            Navigator.pushReplacementNamed(context, 'login');
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 12),
+                            child: const Text(
+                              'Actualizar',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
-                        ],
-                      )),
-                )
+                        ),
+                      ],
+                    ))
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  SafeArea iconoPersona() {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 30),
-        width: double.infinity,
-        child: const Icon(
-          Icons.person,
-          color: Colors.white,
-          size: 100,
-        ),
-      ),
-    );
-  }
-
-  Container cajaPurpura(Size size) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 74, 167, 239),
-            Color.fromARGB(255, 74, 167, 239),
-          ],
-        ),
-      ),
-      width: double.infinity,
-      height: size.height * 0.4,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 90,
-            left: 30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -40,
-            left: -30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -50,
-            right: -20,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: -50,
-            right: 10,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: 120,
-            right: 20,
-            child: burbuja(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container burbuja() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }

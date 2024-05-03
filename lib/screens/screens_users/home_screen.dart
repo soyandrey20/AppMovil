@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:empezar/importaciones/imports.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Análisis'),
               onTap: () {
                 Navigator.pushNamed(context, 'analisis');
+              },
+            ),
+            ListTile(
+              title: const Text('parametro sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'para_sensor');
               },
             ),
             ListTile(
@@ -136,12 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ?.copyWith(fontSize: 30)
                       .copyWith(color: Colors.white),
                 ),
-                Container(
-                  child: const Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [],
-                    ),
+                const Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    children: [],
                   ),
                 ),
               ],
@@ -151,61 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 5,
           ),
         ],
-      ),
-    );
-  }
-
-  Container cajaPurpura(Size size) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 74, 167, 239),
-            Color.fromARGB(255, 74, 167, 239),
-          ],
-        ),
-      ),
-      width: double.infinity,
-      height: size.height * 0.4,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 90,
-            left: 30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -40,
-            left: -30,
-            child: burbuja(),
-          ),
-          Positioned(
-            top: -50,
-            right: -20,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: -50,
-            right: 10,
-            child: burbuja(),
-          ),
-          Positioned(
-            bottom: 120,
-            right: 20,
-            child: burbuja(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container burbuja() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: const Color.fromARGB(255, 23, 113, 247).withOpacity(0.3),
       ),
     );
   }
