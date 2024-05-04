@@ -11,8 +11,6 @@ class UsuarioProvider with ChangeNotifier {
 
   List<TipoParametro> tipoSensor = [];
 
-  List<Usuario> usuarioo = [];
-
   List<ParametroSensor> paraSensor = [];
 
   var idd = '';
@@ -20,10 +18,13 @@ class UsuarioProvider with ChangeNotifier {
   Usuario usuario = Usuario(
     cedula: '',
     name_1: '',
+    name_2: '',
     lastName_1: '',
     lastName_2: '',
     email: '',
     password: '',
+    permisos: '',
+    estado: true,
   );
 
   UsuarioProvider() {
@@ -67,10 +68,13 @@ class UsuarioProvider with ChangeNotifier {
       final response = usuariooFromJson(resp.body);
       usuario.cedula = response.cedula;
       usuario.name_1 = response.name_1;
+      usuario.name_2 = response.name_2;
       usuario.lastName_1 = response.lastName_1;
       usuario.lastName_2 = response.lastName_2;
       usuario.email = response.email;
       usuario.password = response.password;
+      usuario.permisos = response.permisos;
+      usuario.estado = response.estado;
 
       notifyListeners();
     } else {
@@ -81,8 +85,16 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addUser(String cedula, String nombre, String apellido1,
-      String apellido2, String email, String password, String permisos) async {
+  Future<void> addUser(
+      String cedula,
+      String nombre1,
+      String nombre2,
+      String apellido1,
+      String apellido2,
+      String email,
+      String password,
+      String permisos,
+      bool estado) async {
     final url1 = Uri.http(urlapi, '/Usuarios');
 
     final resp = await http.post(url1,
@@ -94,12 +106,14 @@ class UsuarioProvider with ChangeNotifier {
         },
         body: jsonEncode({
           'Cedula': cedula,
-          'name_1': nombre,
+          'name_1': nombre1,
+          'name_2': nombre2,
           'LastName_1': apellido1,
           'LastName_2': apellido2,
           'email': email,
           'password': password,
-          'Permisos': permisos
+          'Permisos': permisos,
+          'Estado': estado
         }));
     if (resp.statusCode == 200) {
       notifyListeners();
@@ -111,8 +125,16 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(String cedula, String nombre, String apellido1,
-      String apellido2, String email, String password) async {
+  Future<void> updateUser(
+      String cedula,
+      String nombre1,
+      String nombre2,
+      String apellido1,
+      String apellido2,
+      String email,
+      String password,
+      String permisos,
+      bool estado) async {
     final url1 = Uri.http(urlapi, '/Usuarios/$cedula');
     final resp = await http.put(url1,
         headers: {
@@ -123,11 +145,14 @@ class UsuarioProvider with ChangeNotifier {
         },
         body: jsonEncode({
           'cedula': cedula,
-          'name_1': nombre,
+          'name_1': nombre1,
+          'name_2': nombre2,
           'LastName_1': apellido1,
           'LastName_2': apellido2,
           'email': email,
-          'password': password
+          'password': password,
+          'Permisos': permisos,
+          'Estado': estado
         }));
     if (resp.statusCode == 200) {
       notifyListeners();
@@ -141,16 +166,20 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteUser(String id) async {
-    final url1 = Uri.http(urlapi, '/Usuarios/$id');
-    final resp = await http.delete(url1, headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-cedentials': 'true',
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    });
+  Future<void> deleteUser(String cedula, bool estado) async {
+    final url1 = Uri.http(urlapi, '/DeleteUsuarios/$cedula');
+    final resp = await http.put(url1,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-cedentials': 'true',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({'cedula': cedula, 'Estado': estado}));
     if (resp.statusCode == 200) {
       notifyListeners();
+      usuarios.clear();
+      getUsers();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
       if (kDebugMode) {
@@ -288,6 +317,31 @@ class UsuarioProvider with ChangeNotifier {
         body: jsonEncode({
           'informacion': informacion,
           'id_tp_sensor': id,
+        }));
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
+    }
+  }
+
+  Future<void> addParametro(String inferior, String superior, int id) async {
+    final url1 = Uri.http(urlapi, '/parametro');
+
+    final resp = await http.post(url1,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-cedentials': 'true',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'inferior': inferior,
+          'superior': superior,
+          'id_tp_para': id,
         }));
     if (resp.statusCode == 200) {
       notifyListeners();

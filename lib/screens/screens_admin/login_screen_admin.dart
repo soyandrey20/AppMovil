@@ -8,6 +8,16 @@ class LoginScreenAdmin extends StatefulWidget {
 }
 
 class _LoginScreenAdminState extends State<LoginScreenAdmin> {
+  var txtCedula = TextEditingController();
+  var txtPassword = TextEditingController();
+
+  @override
+  void dispose() {
+    txtCedula.dispose();
+    txtPassword.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -43,9 +53,6 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
 
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-
-    var txtCedula = TextEditingController();
-    var txtPassword = TextEditingController();
 
     return SingleChildScrollView(
       child: Column(
@@ -83,7 +90,7 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                   child: Column(
                     children: [
                       TextFormField(
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.number,
                         autocorrect: false,
                         controller: txtCedula,
                         decoration: InputDecorations.inputDecoration(
@@ -122,40 +129,8 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
                         disabledColor: Colors.grey,
                         color: Colors.deepPurple,
                         onPressed: () {
-                          var user = usuarioProvider.usuarios;
-
-                          var existingAcount = 1;
-                          var index = 0;
-
-                          for (index = 0; index < user.length; index++) {
-                            if (user[index].cedula == txtCedula.text &&
-                                user[index].password == txtPassword.text) {
-                              existingAcount = 0;
-                              break;
-                            } else {
-                              existingAcount = 1;
-                            }
-                          }
-
-                          if (existingAcount == 0 &&
-                              user[index].permisos == 'Admin') {
-                            usuarioProvider.getUsers();
-                            Navigator.pushReplacementNamed(
-                                context, 'information_admin');
-                          } else if (existingAcount == 0 &&
-                              user[index].permisos != 'Admin') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Permiso denegado, intente de nuevo'),
-                              ),
-                            );
-                          } else if (existingAcount == 1) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Datos incorrectos, intente de nuevo')));
-                          }
+                          loginAdmin(
+                              usuarioProvider, txtCedula, txtPassword, context);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -177,5 +152,40 @@ class _LoginScreenAdminState extends State<LoginScreenAdmin> {
         ],
       ),
     );
+  }
+
+  void loginAdmin(
+      UsuarioProvider usuarioProvider,
+      TextEditingController txtCedula,
+      TextEditingController txtPassword,
+      BuildContext context) {
+    var user = usuarioProvider.usuarios;
+
+    var existingAcount = 1;
+    var index = 0;
+
+    for (index = 0; index < user.length; index++) {
+      if (user[index].cedula == txtCedula.text &&
+          user[index].password == txtPassword.text) {
+        existingAcount = 0;
+        break;
+      } else {
+        existingAcount = 1;
+      }
+    }
+
+    if (existingAcount == 0 && user[index].permisos == 'Admin') {
+      usuarioProvider.getUsers();
+      Navigator.pushReplacementNamed(context, 'information_admin');
+    } else if (existingAcount == 0 && user[index].permisos != 'Admin') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Permiso denegado, intente de nuevo'),
+        ),
+      );
+    } else if (existingAcount == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Datos incorrectos, intente de nuevo')));
+    }
   }
 }

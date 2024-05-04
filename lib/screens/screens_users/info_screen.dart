@@ -1,15 +1,13 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class HomeScreenAdmin extends StatefulWidget {
-  const HomeScreenAdmin({super.key});
+class InfoUser extends StatefulWidget {
+  const InfoUser({super.key});
 
   @override
-  State<HomeScreenAdmin> createState() => _HomeScreenAdminState();
+  State<InfoUser> createState() => _InfoUserState();
 }
 
-class _HomeScreenAdminState extends State<HomeScreenAdmin> {
-  UsuarioProvider usuarioProvider = UsuarioProvider();
-
+class _InfoUserState extends State<InfoUser> {
   var txtCedula = TextEditingController();
   var txtEmail = TextEditingController();
   var txtPassword = TextEditingController();
@@ -17,7 +15,6 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
   var txtName2 = TextEditingController();
   var txtLastName1 = TextEditingController();
   var txtLastName2 = TextEditingController();
-  bool isEnabled = false;
 
   @override
   void dispose() {
@@ -43,7 +40,6 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
         child: Stack(
           children: [
             cajaPurpura(size),
-            iconoPersona(),
             loginForm(context),
           ],
         ),
@@ -55,7 +51,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
             return IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'information_admin');
+                Navigator.pushReplacementNamed(context, 'home');
               },
             );
           },
@@ -73,16 +69,15 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
     txtName2.text = user.name_2;
     txtLastName1.text = user.lastName_1;
     txtLastName2.text = user.lastName_2;
-
+    txtEmail.text = user.email;
     txtPassword.text = user.password;
     txtCedula.text = user.cedula;
-    isEnabled = user.estado;
 
     return SingleChildScrollView(
       child: Column(
         children: [
           const SizedBox(
-            height: 200,
+            height: 220,
           ),
           Container(
             padding: const EdgeInsets.all(20),
@@ -104,7 +99,7 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Informacion del usuario',
+                Text('Mi perfil',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 10,
@@ -113,11 +108,11 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
-                      Identification(txtCedula: txtCedula),
+                      IdentificationUser(txtCedula: txtCedula),
                       const SizedBox(
                         height: 10,
                       ),
-                      NamesAdmin(txtName1: txtName1, txtName2: txtName2),
+                      NamesUser(txtName1: txtName1, txtName2: txtName2),
                       const SizedBox(
                         height: 10,
                       ),
@@ -125,66 +120,36 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
                       const SizedBox(
                         height: 10,
                       ),
-                      EmailAdmin(txtEmail: txtEmail),
-                      PasswordAdmin(txtPassword: txtPassword),
+                      EmailUser(txtEmail: txtEmail),
+                      PasswordUser(txtPassword: txtPassword),
                       const SizedBox(
                         height: 20,
-                      ),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        disabledColor: Colors.grey,
-                        color: Colors.deepPurple,
-                        onPressed: () async {
-                          if (txtEmail.text.isEmpty ||
-                              !EmailValidator.validate(txtEmail.text)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text(' por favor ingrese un correo válido'),
-                              ),
-                            );
-                          } else {
-                            await usuarioProvider.updateUser(
-                                user.cedula,
-                                txtName1.text,
-                                txtName2.text,
-                                user.lastName_1,
-                                user.lastName_2,
-                                txtEmail.text,
-                                user.password,
-                                user.permisos,
-                                isEnabled);
-                            Navigator.pushReplacementNamed(
-                                context, 'information_admin');
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Usuario actualizado'),
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 12),
-                          child: const Text(
-                            'Actualizar',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Estado del usuario'),
-                          Switch(value: isEnabled, onChanged: (value) {}),
-                        ],
-                      )
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10), // Adjust padding as needed
+                          child: TextButton.icon(
+                            icon: const Icon(Icons.delete),
+                            label: const Text(
+                              'Desactivar cuenta',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            onPressed: () {
+                              Deshabilitar(context, txtCedula, usuarioProvider);
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 )
@@ -193,6 +158,43 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<dynamic> Deshabilitar(BuildContext context,
+      TextEditingController txtCedula, UsuarioProvider usuarioProvider) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmación'),
+          content:
+              const Text('¿Estás seguro de que deseas Eliminar este usuario?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  usuarioProvider.deleteUser(txtCedula.text, false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Usuario eliminado correctamente'),
+                    ),
+                  );
+                });
+                Navigator.pushReplacementNamed(context, 'login');
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -235,16 +237,8 @@ class _HomeScreenAdminState extends State<HomeScreenAdmin> {
   }
 }
 
-class EmailValidator {
-  static bool validate(String email) {
-    String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
-    RegExp regExp = RegExp(pattern);
-    return regExp.hasMatch(email);
-  }
-}
-
-class Identification extends StatelessWidget {
-  const Identification({
+class IdentificationUser extends StatelessWidget {
+  const IdentificationUser({
     super.key,
     required this.txtCedula,
   });
@@ -271,8 +265,8 @@ class Identification extends StatelessWidget {
   }
 }
 
-class NamesAdmin extends StatelessWidget {
-  const NamesAdmin({
+class NamesUser extends StatelessWidget {
+  const NamesUser({
     super.key,
     required this.txtName1,
     required this.txtName2,
@@ -322,8 +316,8 @@ class NamesAdmin extends StatelessWidget {
   }
 }
 
-class EmailAdmin extends StatelessWidget {
-  const EmailAdmin({
+class EmailUser extends StatelessWidget {
+  const EmailUser({
     super.key,
     required this.txtEmail,
   });
@@ -357,8 +351,8 @@ class EmailAdmin extends StatelessWidget {
   }
 }
 
-class PasswordAdmin extends StatelessWidget {
-  const PasswordAdmin({
+class PasswordUser extends StatelessWidget {
+  const PasswordUser({
     super.key,
     required this.txtPassword,
   });

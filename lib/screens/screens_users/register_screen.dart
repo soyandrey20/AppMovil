@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
-                      Identification(txtCedula: txtCedula),
+                      IdentificationAdmin(txtCedula: txtCedula),
                       const SizedBox(
                         height: 10,
                       ),
@@ -150,6 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               txtPassword,
                               txtPasswordConfirm,
                               txtName1,
+                              txtName2,
                               txtLastName1,
                               permisos);
                         },
@@ -234,8 +235,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-class Identification extends StatelessWidget {
-  const Identification({
+class IdentificationAdmin extends StatelessWidget {
+  const IdentificationAdmin({
     super.key,
     required this.txtCedula,
   });

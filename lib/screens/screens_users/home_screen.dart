@@ -90,6 +90,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, 'login');
               },
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 300), // Adjust padding as needed
+                child: TextButton.icon(
+                  icon: const Icon(Icons.person),
+                  label: const Text(
+                    'Ver perfil',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
+                  onPressed: () {
+                    // Navigate to the user profile screen here
+                    Navigator.pushNamed(
+                        context, 'info_user'); // Replace with your route name
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

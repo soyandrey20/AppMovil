@@ -73,6 +73,12 @@ class _SensorScreenState extends State<SensorScreen> {
               },
             ),
             ListTile(
+              title: const Text('parametro sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'para_sensor');
+              },
+            ),
+            ListTile(
               title: const Text('Tipo de sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'tipo_sensor');
