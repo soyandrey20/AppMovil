@@ -27,7 +27,8 @@ export 'package:empezar/screens/screens_users/home_screen.dart';
 export 'package:empezar/screens/screens_admin/home_screen_admin.dart';
 export 'package:empezar/screens/screens_admin/information_screen_admin.dart';
 export 'package:empezar/screens/screens_admin/login_screen_admin.dart';
-export 'package:empezar/screens/screens_users/restore_password.dart';
+export 'package:empezar/screens/screens_users/info_screen.dart';
+
 export 'package:empezar/screens/wellcome_screen.dart';
 export 'package:empezar/screens/screens_users/register_screen.dart';
 export 'package:empezar/screens/screens_users/login_screen.dart';

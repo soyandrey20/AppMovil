@@ -67,6 +67,12 @@ class _ParametroScreenState extends State<ParametroScreen> {
               },
             ),
             ListTile(
+              title: const Text('parametro sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'para_sensor');
+              },
+            ),
+            ListTile(
               title: const Text('Tipo de sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'tipo_sensor');
@@ -160,6 +166,7 @@ class _ParametroScreenState extends State<ParametroScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.number,
                         autocorrect: false,
                         controller: txtRangoInferior,
                         decoration: InputDecorations.inputDecoration(
@@ -172,6 +179,7 @@ class _ParametroScreenState extends State<ParametroScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        keyboardType: TextInputType.number,
                         autocorrect: false,
                         controller: txtRangoSuperior,
                         decoration: InputDecorations.inputDecoration(
@@ -192,15 +200,43 @@ class _ParametroScreenState extends State<ParametroScreen> {
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
                             onPressed: () async {
-                              if (kDebugMode) {
-                                print(selectedTipoParametro);
+                              if (selectedTipoParametro == null) {
+                                mostrarSnackBar(
+                                    context, 'Seleccione el tipo de parámetro');
+                                return;
                               }
+                              if (txtRangoInferior.text.isEmpty) {
+                                mostrarSnackBar(
+                                    context, 'Ingrese el rango inferior');
+                                return;
+                              }
+                              if (txtRangoSuperior.text.isEmpty) {
+                                mostrarSnackBar(
+                                    context, 'Ingrese el rango superior');
+                                return;
+                              }
+                              int id = 1;
+                              //se recorre la lista de tipos de sensor para obtener el id
+                              for (int i = 0; i < tipoParametro.length; i++) {
+                                if (tipoParametro[i].descripcion ==
+                                    selectedTipoParametro) {
+                                  id = tipoParametro[i].id;
+                                }
+                              }
+
+                              print('id: $id');
+                              await usuarioProvider.addParametro(
+                                txtRangoInferior.text,
+                                txtRangoSuperior.text,
+                                id,
+                              );
+                              Navigator.pushNamed(context, 'home');
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
                               child: const Text(
-                                'Buscar',
+                                'Agregar',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18),
                               ),
@@ -244,6 +280,14 @@ class _ParametroScreenState extends State<ParametroScreen> {
             height: 5,
           ),
         ],
+      ),
+    );
+  }
+
+  void mostrarSnackBar(BuildContext context, String s) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(s),
       ),
     );
   }

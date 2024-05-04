@@ -12,6 +12,7 @@ class Registro {
   String email;
   String password;
   String permisos;
+  bool estado;
 
   Registro({
     required this.cedula,
@@ -21,6 +22,7 @@ class Registro {
     required this.email,
     required this.password,
     required this.permisos,
+    required this.estado,
   });
 
   factory Registro.fromJson(Map<String, dynamic> json) => Registro(
@@ -31,6 +33,7 @@ class Registro {
         email: json["email"],
         password: json["password"],
         permisos: json["Permisos"],
+        estado: json["Estado"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class Registro {
         "email": email,
         "password": password,
         "Permisos": permisos,
+        "Estado": estado,
       };
 }

@@ -8,6 +8,15 @@ class InformationScreenAdmin extends StatefulWidget {
 }
 
 class _InformationScreenAdminState extends State<InformationScreenAdmin> {
+  bool isEnabled = false;
+  var txtCedula = TextEditingController();
+
+  @override
+  void dispose() {
+    txtCedula.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -45,7 +54,6 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
 
     var users = usuarioProvider.usuarios;
-    var txtCedula = TextEditingController();
 
     return SingleChildScrollView(
       child: Column(
@@ -83,7 +91,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                   child: Column(
                     children: [
                       TextFormField(
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.number,
                         autocorrect: false,
                         controller: txtCedula,
                         decoration: InputDecorations.inputDecoration(
@@ -111,29 +119,8 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
                             onPressed: () async {
-                              var existingAcount = 1;
-
-                              for (var i = 0; i < users.length; i++) {
-                                if (users[i].cedula == txtCedula.text) {
-                                  existingAcount = 0;
-                                  usuarioProvider.getUser(users[i].cedula);
-                                  break;
-                                } else {
-                                  existingAcount;
-                                }
-                              }
-
-                              if (existingAcount == 0) {
-                                Navigator.pushReplacementNamed(
-                                    context, 'home_admin');
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Cedula no registrado, intente de nuevo'),
-                                  ),
-                                );
-                              }
+                              buscar(
+                                  users, txtCedula, usuarioProvider, context);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -157,28 +144,8 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                             color: Colors.red, // Color de eliminación
 
                             onPressed: () {
-                              var existingAcount = 1;
-
-                              for (var i = 0; i < users.length; i++) {
-                                if (users[i].cedula == txtCedula.text) {
-                                  existingAcount = 0;
-                                  usuarioProvider.getUser(users[i].cedula);
-                                  break;
-                                } else {
-                                  existingAcount;
-                                }
-                              }
-
-                              if (existingAcount == 0) {
-                                usuarioProvider.deleteUser(users[0].cedula);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Cedula no registrado, intente de nuevo'),
-                                  ),
-                                );
-                              }
+                              Deshabilitar(
+                                  context, users, txtCedula, usuarioProvider);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -207,5 +174,87 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
         ],
       ),
     );
+  }
+
+  Future<dynamic> Deshabilitar(BuildContext context, List<Usuarios> users,
+      TextEditingController txtCedula, UsuarioProvider usuarioProvider) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmación'),
+          content:
+              const Text('¿Estás seguro de que deseas Eliminar este usuario?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  var existingAcount = 1;
+
+                  for (var i = 0; i < users.length; i++) {
+                    if (users[i].cedula == txtCedula.text) {
+                      existingAcount = 0;
+                      usuarioProvider.getUser(users[i].cedula);
+                      break;
+                    } else {
+                      existingAcount;
+                    }
+                  }
+
+                  if (existingAcount == 0) {
+                    usuarioProvider.deleteUser(txtCedula.text, false);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Usuario eliminado correctamente'),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Cedula no registrada, intente de nuevo'),
+                      ),
+                    );
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void buscar(List<Usuarios> users, TextEditingController txtCedula,
+      UsuarioProvider usuarioProvider, BuildContext context) {
+    var existingAcount = 1;
+
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].cedula == txtCedula.text) {
+        existingAcount = 0;
+        usuarioProvider.getUser(users[i].cedula);
+        break;
+      } else {
+        existingAcount;
+      }
+    }
+
+    if (existingAcount == 0) {
+      Navigator.pushReplacementNamed(context, 'home_admin');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cedula no registrado, intente de nuevo'),
+        ),
+      );
+    }
   }
 }

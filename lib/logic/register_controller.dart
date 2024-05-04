@@ -10,6 +10,7 @@ Future<void> registerUser(
     TextEditingController txtPassword,
     TextEditingController txtPasswordConfirm,
     TextEditingController txtName1,
+    TextEditingController txtName2,
     TextEditingController txtLastName1,
     String permisos) async {
   var user = usuarioProvider.usuarios;
@@ -25,6 +26,9 @@ Future<void> registerUser(
   }
   if (txtLastName2.text.isEmpty) {
     txtLastName2.text = 'N/A';
+  }
+  if (txtName2.text.isEmpty) {
+    txtName2.text = 'N/A';
   }
 
   if (emailExist == 1) {
@@ -48,11 +52,13 @@ Future<void> registerUser(
     await usuarioProvider.addUser(
         txtCedula.text,
         txtName1.text,
+        txtName2.text,
         txtLastName1.text,
         txtLastName2.text,
         txtEmail.text,
         txtPassword.text,
-        permisos);
+        permisos,
+        true);
     emailExist = 0;
     Navigator.pushReplacementNamed(context, 'home');
   } else {

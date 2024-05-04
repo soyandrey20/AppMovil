@@ -89,12 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
-                        identification(txtCedula: txtCedula),
+                        LoginIdentification(txtCedula: txtCedula),
                         const SizedBox(
                           height: 40,
                         ),
-                        password(txtPassword: txtPassword),
-                        const forgotPassword(),
+                        LoginPassword(txtPassword: txtPassword),
+                        const ForgotPassword(),
                         const SizedBox(
                           height: 10,
                         ),
@@ -124,15 +124,15 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(
             height: 15,
           ),
-          const register(),
+          const LoginRegistrer(),
         ],
       ),
     );
   }
 }
 
-class register extends StatelessWidget {
-  const register({
+class LoginRegistrer extends StatelessWidget {
+  const LoginRegistrer({
     super.key,
   });
 
@@ -157,8 +157,8 @@ class register extends StatelessWidget {
   }
 }
 
-class forgotPassword extends StatelessWidget {
-  const forgotPassword({
+class ForgotPassword extends StatelessWidget {
+  const ForgotPassword({
     super.key,
   });
 
@@ -179,8 +179,8 @@ class forgotPassword extends StatelessWidget {
   }
 }
 
-class password extends StatelessWidget {
-  const password({
+class LoginPassword extends StatelessWidget {
+  const LoginPassword({
     super.key,
     required this.txtPassword,
   });
@@ -202,8 +202,8 @@ class password extends StatelessWidget {
   }
 }
 
-class identification extends StatelessWidget {
-  const identification({
+class LoginIdentification extends StatelessWidget {
+  const LoginIdentification({
     super.key,
     required this.txtCedula,
   });

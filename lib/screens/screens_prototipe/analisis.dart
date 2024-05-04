@@ -76,6 +76,12 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
               },
             ),
             ListTile(
+              title: const Text('parametro sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'para_sensor');
+              },
+            ),
+            ListTile(
               title: const Text('Tipo de sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'tipo_sensor');
@@ -256,14 +262,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () async {
-                              print(usuarioProvider.paraSensor.length);
-
-                              for (var i = 0; i < tipoParaSensor.length; i++) {
-                                print(
-                                    usuarioProvider.paraSensor[i].idparaSensor);
-                              }
-                            },
+                            onPressed: () async {},
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
@@ -279,29 +278,29 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: '¿Deseas eliminar?',
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15),
-                          children: [
-                            TextSpan(
-                              text: ' Click aquí',
-                              style: const TextStyle(
-                                  color: Colors.blue, fontSize: 18),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  usuarioProvider.tipoSensor;
-                                  Navigator.pushReplacementNamed(
-                                      context, 'eliminar_tss');
-                                },
-                            ),
-                          ],
-                        ),
-                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      // RichText(
+                      //   text: TextSpan(
+                      //     text: '¿Deseas eliminar?',
+                      //     style: const TextStyle(
+                      //         color: Colors.black, fontSize: 15),
+                      //     children: [
+                      //       TextSpan(
+                      //         text: ' Click aquí',
+                      //         style: const TextStyle(
+                      //             color: Colors.blue, fontSize: 18),
+                      //         recognizer: TapGestureRecognizer()
+                      //           ..onTap = () {
+                      //             usuarioProvider.tipoSensor;
+                      //             Navigator.pushReplacementNamed(
+                      //                 context, 'eliminar_tss');
+                      //           },
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -327,7 +326,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
         for (var j = 0; j < tipoPara.length && !encontrado1; j++) {
           if (tipoParaSensor[int.parse(newValue!) - 1].idparaSensor ==
                   int.parse(newValue) &&
-              tipoParaSensor[int.parse(newValue!) - 1].idParametro ==
+              tipoParaSensor[int.parse(newValue) - 1].idParametro ==
                   tipoPara[j].id) {
             txtParametro.text = tipoPara[j].descripcion.toString();
 
@@ -341,7 +340,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
         for (var j = 0; j < tipoSensor.length && !encontrado; j++) {
           if (tipoParaSensor[int.parse(newValue!) - 1].idparaSensor ==
                   int.parse(newValue) &&
-              tipoParaSensor[int.parse(newValue!) - 1].idSensor ==
+              tipoParaSensor[int.parse(newValue) - 1].idSensor ==
                   tipoSensor[j].id) {
             txtSensor.text = tipoSensor[j].descripcion.toString();
 
