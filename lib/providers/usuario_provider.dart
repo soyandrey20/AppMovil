@@ -1,50 +1,103 @@
 import 'package:empezar/importaciones/imports.dart';
+import 'package:empezar/models/finca.dart';
+import 'package:empezar/models/persona.dart';
+import 'package:empezar/models/personas.dart';
+import 'package:empezar/models/tp_personas.dart';
+import 'package:empezar/models/users.dart';
 
 import 'package:http/http.dart' as http;
 
 const urlapi = url;
 
 class UsuarioProvider with ChangeNotifier {
-  List<Usuarios> usuarios = [];
-
   List<TipoParametro> tipoParametro = [];
 
   List<TipoParametro> tipoSensor = [];
 
   List<ParametroSensor> paraSensor = [];
 
+  List<Persona> persona = [];
+
+  List<TpPersona> tpPersona = [];
+
+  List<Users> usuarios = [];
+
+  List<Finca> fincas = [];
   var idd = '';
 
-  Usuario usuario = Usuario(
+  Personas usuario = Personas(
     cedula: '',
-    name_1: '',
-    name_2: '',
+    idTpersona: 0,
+    nombre_1: '',
+    nombre_2: '',
     lastName_1: '',
     lastName_2: '',
     email: '',
-    password: '',
-    permisos: '',
     estado: true,
   );
 
   UsuarioProvider() {
-    getUsers();
+    getTpPersonas();
+    getPersonas();
+    getUsuarios();
     getTipeParameters();
-    getTipeSensors();
     getParaSensors();
+    getTipeSensors();
+    getFincas();
   }
 
-  Future<void> getUsers() async {
-    final ulr1 = Uri.http(urlapi, '/Usuarios');
+  Future<void> getFincas() async {
+    final ulr1 = Uri.http(urlapi, '/fincas');
     final resp = await http.get(ulr1, headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-cedentials': 'true',
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
-    final res = usuarioFromJson(resp.body);
+    final res = fincaFromJson(resp.body);
     if (resp.statusCode == 200) {
+      fincas.clear();
+      fincas = res;
+      notifyListeners();
+    } else {
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
+    }
+  }
+
+  Future<void> getUsuarios() async {
+    final ulr1 = Uri.http(urlapi, '/usuarios');
+    final resp = await http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+    final res = UsersFromJson(resp.body);
+    if (resp.statusCode == 200) {
+      usuarios.clear();
       usuarios = res;
+      notifyListeners();
+    } else {
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
+    }
+  }
+
+  Future<void> getTpPersonas() async {
+    final ulr1 = Uri.http(urlapi, '/Tipo_persona');
+    final resp = await http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+    final res = TpPersonaFromJson(resp.body);
+    if (resp.statusCode == 200) {
+      tpPersona.clear();
+      tpPersona = res;
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
@@ -54,9 +107,9 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getUser(id) async {
+  Future<void> getPersona(id) async {
     idd = id.toString();
-    final ulr1 = Uri.http(urlapi, '/Usuarios/$id');
+    final ulr1 = Uri.http(urlapi, '/persona/$id');
     final resp = await http.get(ulr1, headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-cedentials': 'true',
@@ -65,15 +118,16 @@ class UsuarioProvider with ChangeNotifier {
     });
 
     if (resp.statusCode == 200) {
-      final response = usuariooFromJson(resp.body);
+      print(resp.body);
+      final response = personasFromJson(resp.body);
+
       usuario.cedula = response.cedula;
-      usuario.name_1 = response.name_1;
-      usuario.name_2 = response.name_2;
+      usuario.nombre_1 = response.nombre_1;
+      usuario.nombre_2 = response.nombre_2;
       usuario.lastName_1 = response.lastName_1;
       usuario.lastName_2 = response.lastName_2;
       usuario.email = response.email;
-      usuario.password = response.password;
-      usuario.permisos = response.permisos;
+
       usuario.estado = response.estado;
 
       notifyListeners();
@@ -85,47 +139,7 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addUser(
-      String cedula,
-      String nombre1,
-      String nombre2,
-      String apellido1,
-      String apellido2,
-      String email,
-      String password,
-      String permisos,
-      bool estado) async {
-    final url1 = Uri.http(urlapi, '/Usuarios');
-
-    final resp = await http.post(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({
-          'Cedula': cedula,
-          'name_1': nombre1,
-          'name_2': nombre2,
-          'LastName_1': apellido1,
-          'LastName_2': apellido2,
-          'email': email,
-          'password': password,
-          'Permisos': permisos,
-          'Estado': estado
-        }));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
-  Future<void> updateUser(
+  Future<void> updatePersona(
       String cedula,
       String nombre1,
       String nombre2,
@@ -156,30 +170,6 @@ class UsuarioProvider with ChangeNotifier {
         }));
     if (resp.statusCode == 200) {
       notifyListeners();
-      usuarios.clear();
-      getUsers();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
-  Future<void> deleteUser(String cedula, bool estado) async {
-    final url1 = Uri.http(urlapi, '/DeleteUsuarios/$cedula');
-    final resp = await http.put(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'cedula': cedula, 'Estado': estado}));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-      usuarios.clear();
-      getUsers();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
       if (kDebugMode) {
@@ -189,19 +179,8 @@ class UsuarioProvider with ChangeNotifier {
   }
 
   Future<void> restorePasword(id) async {
-    final ulr1 = Uri.http(urlapi, '/enviarcorreo/$id');
-    await http.get(ulr1, headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-cedentials': 'true',
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    });
-  }
-
-  Future<void> addTipeParametro(String descripcion) async {
-    final url1 = Uri.http(urlapi, '/Tipo_parametro');
-
-    final resp = await http.post(url1,
+    final ulr1 = Uri.http(urlapi, '/enviarcorreo');
+    final resp = await http.post(ulr1,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-cedentials': 'true',
@@ -209,14 +188,14 @@ class UsuarioProvider with ChangeNotifier {
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'Descripcion': descripcion,
+          'id': id,
         }));
     if (resp.statusCode == 200) {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
       if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
       }
     }
   }
@@ -242,29 +221,6 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addTipeSensor(String descripcion) async {
-    final url1 = Uri.http(urlapi, '/Tipo_sensor');
-
-    final resp = await http.post(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({
-          'Descripcion': descripcion,
-        }));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
   Future<void> getTipeSensors() async {
     final ulr1 = Uri.http(urlapi, '/Tipo_sensor');
     final resp = await http.get(ulr1, headers: {
@@ -286,97 +242,6 @@ class UsuarioProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteTipeSensor(String descripcion) async {
-    final url1 = Uri.http(urlapi, '/Tipo_sensor/$descripcion');
-    final resp = await http.delete(url1, headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-cedentials': 'true',
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    });
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
-  Future<void> addSensor(String informacion, int id) async {
-    final url1 = Uri.http(urlapi, '/sensor');
-
-    final resp = await http.post(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({
-          'informacion': informacion,
-          'id_tp_sensor': id,
-        }));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
-  Future<void> addParametro(String inferior, String superior, int id) async {
-    final url1 = Uri.http(urlapi, '/parametro');
-
-    final resp = await http.post(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({
-          'inferior': inferior,
-          'superior': superior,
-          'id_tp_para': id,
-        }));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
-  Future<void> addParaSensor(int idSensor, int idParametro) async {
-    final url1 = Uri.http(urlapi, '/parametro_sensor');
-
-    final resp = await http.post(url1,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-cedentials': 'true',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({
-          'id_sensor': idSensor,
-          'id_parametro': idParametro,
-        }));
-    if (resp.statusCode == 200) {
-      notifyListeners();
-    } else {
-      // Manejar el caso en que la solicitud no fue exitosa
-      if (kDebugMode) {
-        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
-      }
-    }
-  }
-
   Future<void> getParaSensors() async {
     final ulr1 = Uri.http(urlapi, '/parametro_sensor');
     final resp = await http.get(ulr1, headers: {
@@ -392,6 +257,68 @@ class UsuarioProvider with ChangeNotifier {
       notifyListeners();
     } else {
       // Manejar el caso en que la solicitud no fue exitosa
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
+    }
+  }
+
+  Future<void> addPersona(
+      String cedula,
+      int idTpPersona,
+      String nombre1,
+      String nombre2,
+      String apellido1,
+      String apellido2,
+      String email,
+      String password,
+      String permisos,
+      bool estado) async {
+    final url1 = Uri.http(urlapi, '/Usuarios');
+
+    final resp = await http.post(url1,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-cedentials': 'true',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'Cedula': cedula,
+          'id_tipo_persona': idTpPersona,
+          'Nombre_1': nombre1,
+          'Nombre_2': nombre2,
+          'LastName_1': apellido1,
+          'LastName_2': apellido2,
+          'Email': email,
+          'password': password,
+          'Permisos': permisos,
+          'Estado': estado
+        }));
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      // Manejar el caso en que la solicitud no fue exitosa
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
+      }
+    }
+  }
+
+  Future<void> getPersonas() async {
+    final ulr1 = Uri.http(urlapi, '/persona');
+    final resp = await http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+    final res = personaFromJson(resp.body);
+    if (resp.statusCode == 200) {
+      persona.clear();
+      persona = res;
+      notifyListeners();
+    } else {
       if (kDebugMode) {
         print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
       }

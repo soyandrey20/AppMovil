@@ -14,6 +14,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
   var txtSensor = TextEditingController();
   var txtParametro = TextEditingController();
   String? selectedTipoParametro;
+  String? selectedFinca;
 
   @override
   void initState() {
@@ -70,42 +71,6 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
               child: Text('Opciones'),
             ),
             ListTile(
-              title: const Text('Menu principal'),
-              onTap: () {
-                Navigator.pushNamed(context, 'home');
-              },
-            ),
-            ListTile(
-              title: const Text('parametro sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'para_sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Tipo de sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'tipo_sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Tipo de parámetro'),
-              onTap: () {
-                Navigator.pushNamed(context, 'tipo_parametro');
-              },
-            ),
-            ListTile(
-              title: const Text('Parámetros'),
-              onTap: () {
-                Navigator.pushNamed(context, 'parametros');
-              },
-            ),
-            ListTile(
               title: const Text('Salir'),
               onTap: () {
                 Navigator.pushNamed(context, 'login');
@@ -124,9 +89,13 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
     var tipoSensor = usuarioProvider.tipoSensor;
     var tipoPara = usuarioProvider.tipoParametro;
 
+    var finca = usuarioProvider.fincas;
+
     List<String> tipoParaSensorStrings = tipoParaSensor
         .map((paraSensor) => paraSensor.idparaSensor.toString())
         .toList();
+    List<String> fincasStrings =
+        finca.map((finca) => finca.nombreFinca).toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -210,6 +179,27 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                       ),
                       DropdownButtonFormField<String>(
                         decoration: InputDecorations.inputDecoration(
+                          hintText: 'Seleccione la finca',
+                          labelText: 'Finca',
+                          icon: const Icon(Icons.sensors),
+                        ),
+                        items: fincasStrings.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedFinca = newValue;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecorations.inputDecoration(
                           hintText: 'Seleccione el tipo de sensor',
                           labelText: 'Tipo del parámetro',
                           icon: const Icon(Icons.sensors),
@@ -278,29 +268,6 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                           ),
                         ],
                       ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // RichText(
-                      //   text: TextSpan(
-                      //     text: '¿Deseas eliminar?',
-                      //     style: const TextStyle(
-                      //         color: Colors.black, fontSize: 15),
-                      //     children: [
-                      //       TextSpan(
-                      //         text: ' Click aquí',
-                      //         style: const TextStyle(
-                      //             color: Colors.blue, fontSize: 18),
-                      //         recognizer: TapGestureRecognizer()
-                      //           ..onTap = () {
-                      //             usuarioProvider.tipoSensor;
-                      //             Navigator.pushReplacementNamed(
-                      //                 context, 'eliminar_tss');
-                      //           },
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

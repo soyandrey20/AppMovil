@@ -61,13 +61,13 @@ class _ParametroScreenState extends State<ParametroScreen> {
               },
             ),
             ListTile(
-              title: const Text('Analisis'),
+              title: const Text('Análisis'),
               onTap: () {
                 Navigator.pushNamed(context, 'analisis');
               },
             ),
             ListTile(
-              title: const Text('parametro sensor'),
+              title: const Text('Parámetro sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'para_sensor');
               },
@@ -264,7 +264,7 @@ class _ParametroScreenState extends State<ParametroScreen> {
                                 ..onTap = () {
                                   usuarioProvider.tipoSensor;
                                   Navigator.pushReplacementNamed(
-                                      context, 'eliminar_tss');
+                                      context, 'eliminar_parametro');
                                 },
                             ),
                           ],

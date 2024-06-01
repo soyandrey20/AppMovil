@@ -1,13 +1,13 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterUserScreen extends StatefulWidget {
+  const RegisterUserScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterUserScreen> createState() => _RegisterUserScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterUserScreenState extends State<RegisterUserScreen> {
   var txtCedula = TextEditingController();
   var txtEmail = TextEditingController();
   var txtEmailConfirm = TextEditingController();
@@ -18,8 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var txtLastName1 = TextEditingController();
   var txtLastName2 = TextEditingController();
   var permisos = 'usuario';
-  String? selectedTipoPersona;
-
+  late String selectedTipoPersona;
   @override
   void dispose() {
     txtCedula.dispose();
@@ -69,10 +68,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   SingleChildScrollView loginForm(BuildContext context) {
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-    var tipoPersonas = usuarioProvider.tpPersona;
+    var tipoParaSensor = usuarioProvider.paraSensor;
 
-    List<String> tipoPersonasStrings = tipoPersonas
-        .map((paraSensor) => paraSensor.descripcion.toString())
+    List<String> tipoParaSensorStrings = tipoParaSensor
+        .map((paraSensor) => paraSensor.idparaSensor.toString())
         .toList();
     return SingleChildScrollView(
       child: Column(
@@ -109,20 +108,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
-                      IdentificationAdmin(txtCedula: txtCedula),
-                      const SizedBox(
-                        height: 10,
-                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       DropdownButtonFormField<String>(
                         decoration: InputDecorations.inputDecoration(
-                          hintText: 'Seleccione el tipo de persona',
-                          labelText: 'Tipo de persona*',
-                          icon: const Icon(Icons.person),
+                          hintText: 'Seleccione la finca',
+                          labelText: 'Finca',
+                          icon: const Icon(Icons.sensors),
                         ),
-                        items: tipoPersonasStrings.map((String value) {
+                        items: tipoParaSensorStrings.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -130,31 +125,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }).toList(),
                         onChanged: (String? newValue) {
                           setState(() {
-                            selectedTipoPersona = tipoPersonasStrings
-                                .indexOf(newValue!)
-                                .toString();
+                            permisos = newValue!;
                           });
                         },
                       ),
-                      Names(txtName1: txtName1, txtName2: txtName2),
+
+                      User(txtName1: txtName1, txtName2: txtName2),
                       const SizedBox(
                         height: 10,
                       ),
-
-                      apellidos(txtLastName1, txtLastName2),
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      // Correo electrónico y confirmación de correo electrónico
-                      Email(
-                          txtEmail: txtEmail, txtEmailConfirm: txtEmailConfirm),
-                      const SizedBox(
-                          height:
-                              10), // Espacio entre la confirmación de correo electrónico y la contraseña
 
                       // Contraseña y confirmación de contraseña
-                      Password(
+                      passwordUser(
                           txtPassword: txtPassword,
                           txtPasswordConfirm: txtPasswordConfirm),
                       const SizedBox(
@@ -168,20 +150,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Colors.deepPurple,
                         onPressed: () async {
                           await registerUser(
-                            usuarioProvider,
-                            txtEmail,
-                            txtCedula,
-                            txtLastName2,
-                            context,
-                            txtEmailConfirm,
-                            txtPassword,
-                            txtPasswordConfirm,
-                            txtName1,
-                            txtName2,
-                            txtLastName1,
-                            selectedTipoPersona!,
-                            permisos,
-                          );
+                              usuarioProvider,
+                              txtEmail,
+                              txtCedula,
+                              txtLastName2,
+                              context,
+                              txtEmailConfirm,
+                              txtPassword,
+                              txtPasswordConfirm,
+                              txtName1,
+                              txtName2,
+                              txtLastName1,
+                              selectedTipoPersona,
+                              permisos);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -224,76 +205,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  Row apellidos(
-      TextEditingController txtLastName1, TextEditingController txtLastName2) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            keyboardType: TextInputType.name,
-            autocorrect: false,
-            controller: txtLastName1,
-            decoration: InputDecorations.inputDecoration(
-              hintText: ' ',
-              labelText: 'Primer Apellido*',
-              icon: const Icon(Icons.person),
-            ),
-            validator: (value) {
-              String pattern = r'^[A-Za-z]+';
-              RegExp regExp = RegExp(pattern);
-              return regExp.hasMatch(value ?? '') ? null : 'Apellido no válido';
-            },
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextFormField(
-            keyboardType: TextInputType.name,
-            autocorrect: false,
-            controller: txtLastName2,
-            decoration: InputDecorations.inputDecoration(
-              hintText: ' ',
-              labelText: 'Segundo Apellido',
-              icon: const Icon(Icons.person_outline),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
 
-class IdentificationAdmin extends StatelessWidget {
-  const IdentificationAdmin({
-    super.key,
-    required this.txtCedula,
-  });
-
-  final TextEditingController txtCedula;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      autocorrect: false,
-      controller: txtCedula,
-      decoration: InputDecorations.inputDecoration(
-        hintText: '########',
-        labelText: '# Cédula*',
-        icon: const Icon(Icons.assignment_ind_outlined),
-      ),
-      validator: (value) {
-        String pattern = r'^[0-9]{10}$';
-        RegExp regExp = RegExp(pattern);
-        return regExp.hasMatch(value ?? '') ? null : '# Cédula no válido';
-      },
-    );
-  }
-}
-
-class Names extends StatelessWidget {
-  const Names({
+class User extends StatelessWidget {
+  const User({
     super.key,
     required this.txtName1,
     required this.txtName2,
@@ -313,7 +228,7 @@ class Names extends StatelessWidget {
             controller: txtName1,
             decoration: InputDecorations.inputDecoration(
               hintText: ' ',
-              labelText: 'Primer nombre*',
+              labelText: 'Nombre usuario*',
               icon: const Icon(Icons.person),
             ),
             validator: (value) {
@@ -343,60 +258,8 @@ class Names extends StatelessWidget {
   }
 }
 
-class Email extends StatelessWidget {
-  const Email({
-    super.key,
-    required this.txtEmail,
-    required this.txtEmailConfirm,
-  });
-
-  final TextEditingController txtEmail;
-  final TextEditingController txtEmailConfirm;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          autocorrect: false,
-          controller: txtEmail,
-          decoration: InputDecorations.inputDecoration(
-            hintText: 'ejemplo@gmail.com',
-            labelText: 'Correo*',
-            icon: const Icon(Icons.alternate_email_rounded),
-          ),
-          validator: (value) {
-            String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,}$';
-            RegExp regExp = RegExp(pattern);
-            return regExp.hasMatch(value ?? '') ? null : 'Correo no válido';
-          },
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          autocorrect: false,
-          controller: txtEmailConfirm,
-          decoration: InputDecorations.inputDecoration(
-            hintText: 'ejemplo@gmail.com',
-            labelText: 'Confirmar correo*',
-            icon: const Icon(Icons.alternate_email_rounded),
-          ),
-          validator: (value) {
-            return (txtEmail.text == txtEmailConfirm.text)
-                ? null
-                : 'Los correos no coinciden';
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class Password extends StatelessWidget {
-  const Password({
+class passwordUser extends StatelessWidget {
+  const passwordUser({
     super.key,
     required this.txtPassword,
     required this.txtPasswordConfirm,
@@ -415,7 +278,7 @@ class Password extends StatelessWidget {
           controller: txtPassword,
           decoration: InputDecorations.inputDecoration(
             hintText: '*********',
-            labelText: 'Dígite una contraseña*',
+            labelText: 'Dígite unaC contraseña*',
             icon: const Icon(Icons.lock_outline),
           ),
           validator: (value) {

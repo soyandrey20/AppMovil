@@ -1,19 +1,30 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class ParaSensorScreen extends StatefulWidget {
-  const ParaSensorScreen({super.key});
+class SensorScreen extends StatefulWidget {
+  const SensorScreen({super.key});
 
   @override
-  State<ParaSensorScreen> createState() => _ParaSensorScreenState();
+  State<SensorScreen> createState() => _SensorScreenState();
 }
 
-class _ParaSensorScreenState extends State<ParaSensorScreen> {
-  String? selectedTipoParametro;
+class _SensorScreenState extends State<SensorScreen> {
+  //definir controladores
+  var txtDescripcion = TextEditingController();
   String? selectedTipoSensor;
 
+  //al cerrar la pantalla se limpian los controladores
+  @override
+  void dispose() {
+    txtDescripcion.dispose();
+    super.dispose();
+  }
+
+//se crea la pantalla
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+//se crea el scaffold
 
     return Scaffold(
       body: Container(
@@ -27,6 +38,7 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
           ],
         ),
       ),
+      //se crea el appbar con el titulo y el icono de menu
       appBar: AppBar(
         title: const Text('Home'),
         leading: Builder(
@@ -40,10 +52,12 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
           },
         ),
       ),
+      //se crea el drawer con las opciones de la pantalla
       drawer: Drawer(
         child: ListView(
           children: [
             const DrawerHeader(
+              margin: EdgeInsetsDirectional.all(8),
               child: Text('Opciones'),
             ),
             ListTile(
@@ -53,9 +67,15 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
               },
             ),
             ListTile(
-              title: const Text('Analisis'),
+              title: const Text('Análisis'),
               onTap: () {
                 Navigator.pushNamed(context, 'analisis');
+              },
+            ),
+            ListTile(
+              title: const Text('Parámetro sensor'),
+              onTap: () {
+                Navigator.pushNamed(context, 'para_sensor');
               },
             ),
             ListTile(
@@ -65,19 +85,13 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
               },
             ),
             ListTile(
-              title: const Text('Sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'sensor');
-              },
-            ),
-            ListTile(
               title: const Text('Tipo de parámetro'),
               onTap: () {
                 Navigator.pushNamed(context, 'tipo_parametro');
               },
             ),
             ListTile(
-              title: const Text('Parámetros'),
+              title: const Text('Parámetro'),
               onTap: () {
                 Navigator.pushNamed(context, 'parametros');
               },
@@ -94,19 +108,16 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
     );
   }
 
+//se crea el formulario de la pantalla
   SingleChildScrollView loginForm(BuildContext context) {
+    //se obtiene el provider
     final usuarioProvider = Provider.of<UsuarioProvider>(context);
-
-    var tipoParametro = usuarioProvider.tipoParametro;
-
+//se obtiene los tipos de sensor
     var tipoSensor = usuarioProvider.tipoSensor;
-
-    List<String> tipoParametroStrings =
-        tipoParametro.map((parametro) => parametro.descripcion).toList();
-
+//se crea una lista con los tipos de sensor
     List<String> tipoSensorStrings =
         tipoSensor.map((sensor) => sensor.descripcion).toList();
-
+//se crea la pantalla con los campos de texto y los botones
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -133,7 +144,7 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Text('Análisis del agua',
+                Text('Información del sensor',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -142,13 +153,11 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      //se crea una lista desplegable con los tipos de parámetros
                       DropdownButtonFormField<String>(
                         decoration: InputDecorations.inputDecoration(
-                          hintText: 'Seleccione el tipo de sensor',
-                          labelText: 'Tipo del sensor',
+                          hintText: 'Seleccione el tipo de parámetro',
+                          labelText: 'Tipo de parámetro',
                           icon: const Icon(Icons.sensors),
                         ),
                         items: tipoSensorStrings.map((String value) {
@@ -166,26 +175,21 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      DropdownButtonFormField<String>(
+                      //se crea un campo de texto para la descripción del sensor
+                      TextFormField(
                         decoration: InputDecorations.inputDecoration(
-                          hintText: 'Seleccione el tipo de parámetro',
-                          labelText: 'Tipo del parámetro',
+                          hintText: 'sirve para *****',
+                          labelText: 'Información del sensor',
                           icon: const Icon(Icons.sensors),
                         ),
-                        items: tipoParametroStrings.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
+                        onChanged: (value) {
                           setState(() {
-                            selectedTipoParametro = newValue;
+                            txtDescripcion.text = value;
                           });
                         },
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 25,
                       ),
                       Column(
                         children: [
@@ -196,41 +200,38 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
                             onPressed: () async {
-                              int idSensor = tipoSensor.length + 1;
-                              int idParametro = tipoParametro.length + 1;
-                              for (var i = 0; i < tipoSensor.length; i++) {
+                              //se obtiene el id del tipo de sensor seleccionado
+                              int id = 1;
+                              //se recorre la lista de tipos de sensor para obtener el id
+                              for (int i = 0; i < tipoSensor.length; i++) {
                                 if (tipoSensor[i].descripcion ==
                                     selectedTipoSensor) {
-                                  idSensor = tipoSensor[i].id;
+                                  id = tipoSensor[i].id;
                                 }
                               }
-                              for (var i = 0; i < tipoParametro.length; i++) {
-                                if (tipoParametro[i].descripcion ==
-                                    selectedTipoParametro) {
-                                  idParametro = tipoParametro[i].id;
-                                }
-                              }
-
-                              await usuarioProvider.addParaSensor(
-                                  idSensor, idParametro);
+                              //se agrega el sensor
+                              await usuarioProvider.addSensor(
+                                  txtDescripcion.text, id);
+                              //se redirige a la pantalla de home
+                              Navigator.pushNamed(context, 'home');
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
                               child: const Text(
-                                'Analizar',
+                                'Agregar',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18),
                               ),
                             ),
                           ),
                           const SizedBox(
-                            width: 25,
+                            width: 15,
                           ),
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 5,
                       ),
                       RichText(
                         text: TextSpan(
@@ -246,7 +247,7 @@ class _ParaSensorScreenState extends State<ParaSensorScreen> {
                                 ..onTap = () {
                                   usuarioProvider.tipoSensor;
                                   Navigator.pushReplacementNamed(
-                                      context, 'eliminar_tss');
+                                      context, 'eliminar_sensor');
                                 },
                             ),
                           ],

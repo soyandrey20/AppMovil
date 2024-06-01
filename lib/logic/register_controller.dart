@@ -12,15 +12,17 @@ Future<void> registerUser(
     TextEditingController txtName1,
     TextEditingController txtName2,
     TextEditingController txtLastName1,
+    String selectedTipoPersona,
     String permisos) async {
-  var user = usuarioProvider.usuarios;
+  var persona = usuarioProvider.persona;
+
   var emailExist = 0;
   var cedulaExist = 0;
 
-  for (var i = 0; i < user.length; i++) {
-    if (user[i].email == txtEmail.text) {
+  for (var i = 0; i < persona.length; i++) {
+    if (persona[i].email == txtEmail.text) {
       emailExist = 1;
-    } else if (user[i].cedula == txtCedula.text) {
+    } else if (persona[i].cedula == txtCedula.text) {
       cedulaExist = 1;
     }
   }
@@ -40,7 +42,7 @@ Future<void> registerUser(
   } else if (cedulaExist == 1) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('La cedula ya se encuentra registrada'),
+        content: Text('La cédula ya se encuentra registrada'),
       ),
     );
   } else if (txtEmail.text == txtEmailConfirm.text &&
@@ -49,8 +51,9 @@ Future<void> registerUser(
       txtLastName1.text.isNotEmpty &&
       cedulaExist == 0 &&
       emailExist == 0) {
-    await usuarioProvider.addUser(
+    await usuarioProvider.addPersona(
         txtCedula.text,
+        int.parse(selectedTipoPersona) + 1,
         txtName1.text,
         txtName2.text,
         txtLastName1.text,
@@ -60,7 +63,12 @@ Future<void> registerUser(
         permisos,
         true);
     emailExist = 0;
-    Navigator.pushReplacementNamed(context, 'home');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Usuario registrado con éxito'),
+      ),
+    );
+    Navigator.pushReplacementNamed(context, 'analisis');
   } else {
     emailExist = 0;
     ScaffoldMessenger.of(context).showSnackBar(

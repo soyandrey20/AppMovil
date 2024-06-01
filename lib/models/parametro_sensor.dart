@@ -11,23 +11,24 @@ class ParametroSensor {
   int idparaSensor;
   int idParametro;
   int idSensor;
-
-  ParametroSensor({
-    required this.idparaSensor,
-    required this.idParametro,
-    required this.idSensor,
-  });
+  bool estado;
+  ParametroSensor(
+      {required this.idparaSensor,
+      required this.idParametro,
+      required this.idSensor,
+      required this.estado});
 
   factory ParametroSensor.fromJson(Map<String, dynamic> json) =>
       ParametroSensor(
-        idparaSensor: json["Id"],
-        idParametro: json["id_parametro"],
-        idSensor: json["id_sensor"],
-      );
+          idparaSensor: json["Id"],
+          idParametro: json["id_parametro"],
+          idSensor: json["id_sensor"],
+          estado: json["estado"]);
 
   Map<String, dynamic> toJson() => {
         "Id": idparaSensor,
         "id_parametro": idParametro,
         "id_sensor": idSensor,
+        "estado": estado
       };
 }

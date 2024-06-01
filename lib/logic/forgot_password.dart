@@ -8,7 +8,7 @@ void restorePassword(TextEditingController txtCedula,
   for (var i = 0; i < users.length; i++) {
     if (users[i].cedula == txtCedula.text) {
       existingCount = 1;
-      usuarioProvider.getUser(users[i].cedula);
+      usuarioProvider.getPersona(users[i].cedula);
 
       break;
     }

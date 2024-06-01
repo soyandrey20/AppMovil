@@ -19,8 +19,7 @@ void loginUser(UsuarioProvider usuarioProvider, TextEditingController txtCedula,
   }
 
   if (existingAcount == 0) {
-    usuarioProvider.getUser(txtCedula.text);
-    Navigator.pushReplacementNamed(context, 'home');
+    Navigator.pushReplacementNamed(context, 'analisis');
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
