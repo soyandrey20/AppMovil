@@ -8,6 +8,7 @@ import 'package:empezar/models/users.dart';
 import 'package:http/http.dart' as http;
 
 const urlapi = url;
+const urlArduino = url1;
 
 class UsuarioProvider with ChangeNotifier {
   List<TipoParametro> tipoParametro = [];
@@ -321,6 +322,58 @@ class UsuarioProvider with ChangeNotifier {
     } else {
       if (kDebugMode) {
         print('Error en la solicitud: ${resp.statusCode} ${resp.body} $ulr1');
+      }
+    }
+  }
+
+  Future<void> llamarArduino(
+    String fecha,
+    String finca,
+    String informacion,
+    String correo,
+    String nombre,
+    String apellido,
+  ) async {
+    final ulr1 = Uri.http(urlArduino, '/read-sensor');
+    http.get(ulr1, headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-cedentials': 'true',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    enviarAnalisis(fecha, finca, informacion, correo, nombre, apellido);
+  }
+
+  Future<void> enviarAnalisis(
+    String fecha,
+    String finca,
+    String informacion,
+    String correo,
+    String nombre,
+    String apellido,
+  ) async {
+    final url1 = Uri.http(urlapi, '/AgregarValor');
+    final resp = await http.post(url1,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-cedentials': 'true',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'fecha': fecha,
+          'finca': finca,
+          'informacion': informacion,
+          'correo': correo,
+          'nombre': nombre,
+          'apellido': apellido,
+        }));
+    if (resp.statusCode == 200) {
+      notifyListeners();
+    } else {
+      if (kDebugMode) {
+        print('Error en la solicitud: ${resp.statusCode} ${resp.body} $url1');
       }
     }
   }

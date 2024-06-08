@@ -10,7 +10,7 @@ class AnalisisScreen extends StatefulWidget {
 
 class _AnalisisScreenState extends State<AnalisisScreen> {
   late TextEditingController _txtFechaHoraController;
-  var txtEmail = TextEditingController();
+  var txtInformacion = TextEditingController();
   var txtSensor = TextEditingController();
   var txtParametro = TextEditingController();
   String? selectedTipoParametro;
@@ -29,7 +29,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
   @override
   void dispose() {
     _txtFechaHoraController.dispose();
-    txtEmail.dispose();
+    txtInformacion.dispose();
     txtSensor.dispose();
     txtParametro.dispose();
     super.dispose();
@@ -134,7 +134,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                     children: [
                       TextFormField(
                         autocorrect: false,
-                        controller: txtEmail,
+                        controller: txtInformacion,
                         decoration: InputDecorations.inputDecoration(
                           hintText: 'sirve para *****',
                           labelText: 'Información del agua',
@@ -252,7 +252,41 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () async {},
+                            onPressed: () async {
+                              if (selectedFinca == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Seleccione la finca'),
+                                  ),
+                                );
+                                return;
+                              } else if (txtInformacion.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Ingrese la información del agua'),
+                                  ),
+                                );
+                                return;
+                              } else {
+                                usuarioProvider.llamarArduino(
+                                    _txtFechaHoraController.text,
+                                    selectedFinca!,
+                                    txtInformacion.text,
+                                    usuarioProvider.usuario.email,
+                                    usuarioProvider.usuario.nombre_1,
+                                    usuarioProvider.usuario.lastName_1);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Analisis enviados correctamente al correo registrado'),
+                                  ),
+                                );
+                                txtInformacion.clear();
+                                selectedFinca = null;
+                                selectedTipoParametro = null;
+                              }
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
