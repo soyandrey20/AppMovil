@@ -65,12 +65,12 @@ class _InfoUserState extends State<InfoUser> {
 
     var user = usuarioProvider.usuario;
 
-    txtName1.text = user.name_1;
-    txtName2.text = user.name_2;
+    txtName1.text = user.nombre_1;
+    txtName2.text = user.nombre_2;
     txtLastName1.text = user.lastName_1;
     txtLastName2.text = user.lastName_2;
     txtEmail.text = user.email;
-    txtPassword.text = user.password;
+
     txtCedula.text = user.cedula;
 
     return SingleChildScrollView(
@@ -99,7 +99,7 @@ class _InfoUserState extends State<InfoUser> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Mi perfil',
+                Text('Mi pérfil',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 10,
@@ -181,7 +181,6 @@ class _InfoUserState extends State<InfoUser> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  usuarioProvider.deleteUser(txtCedula.text, false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Usuario eliminado correctamente'),
@@ -252,7 +251,7 @@ class IdentificationUser extends StatelessWidget {
       autocorrect: false,
       controller: txtCedula,
       decoration: InputDecorations.inputDecoration(
-        hintText: '00000000',
+        hintText: '#########',
         labelText: '# Cédula*',
         icon: const Icon(Icons.assignment_ind_outlined),
       ),
@@ -331,6 +330,7 @@ class EmailUser extends StatelessWidget {
         TextFormField(
           keyboardType: TextInputType.emailAddress,
           autocorrect: false,
+          enabled: false,
           controller: txtEmail,
           decoration: InputDecorations.inputDecoration(
             hintText: 'ejemplo@gmail.com',

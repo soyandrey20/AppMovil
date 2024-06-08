@@ -110,30 +110,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 30),
                               child: const Text(
-                                "Usuario",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Material(
-                          color: const Color(0xFF674AEF),
-                          borderRadius: BorderRadius.circular(10),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, 'login_admin');
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 30),
-                              child: const Text(
-                                "Administrador",
+                                "Iniciar",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,

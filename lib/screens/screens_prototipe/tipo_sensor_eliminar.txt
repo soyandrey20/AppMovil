@@ -120,8 +120,8 @@ class _TipoSensorEliminarScreenState extends State<TipoSensorEliminarScreen> {
                             disabledColor: Colors.grey,
                             color: Colors.red, // Color de eliminación
                             onPressed: () {
-                              usuarioProvider
-                                  .deleteTipeSensor('sirve para no sirve');
+                              // usuarioProvider
+                              //     .deleteTipeSensor('sirve para no sirve');
                               // if (selectedTipoParametro == null) {
                               //   ScaffoldMessenger.of(context).showSnackBar(
                               //     const SnackBar(

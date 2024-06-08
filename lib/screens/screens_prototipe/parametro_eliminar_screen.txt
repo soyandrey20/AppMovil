@@ -1,15 +1,14 @@
 import 'package:empezar/importaciones/imports.dart';
 
-class TipoParametroEliminarScreen extends StatefulWidget {
-  const TipoParametroEliminarScreen({super.key});
+class ParametroEliminarScreen extends StatefulWidget {
+  const ParametroEliminarScreen({super.key});
 
   @override
-  State<TipoParametroEliminarScreen> createState() =>
-      _TipoParametroEliminarScreenState();
+  State<ParametroEliminarScreen> createState() =>
+      _ParametroEliminarScreenState();
 }
 
-class _TipoParametroEliminarScreenState
-    extends State<TipoParametroEliminarScreen> {
+class _ParametroEliminarScreenState extends State<ParametroEliminarScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -78,7 +77,7 @@ class _TipoParametroEliminarScreenState
                 const SizedBox(
                   height: 40,
                 ),
-                Text('¿Desea eliminar el tipo de parametró?',
+                Text('¿Desea eliminar el parámetro?',
                     style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(
                   height: 40,
@@ -89,8 +88,8 @@ class _TipoParametroEliminarScreenState
                     children: [
                       DropdownButtonFormField<String>(
                         decoration: InputDecorations.inputDecoration(
-                          hintText: 'Seleccione el tipo de parametró',
-                          labelText: 'Seleccione el tipo de parametró',
+                          hintText: 'Seleccione el tipo de parámetro',
+                          labelText: 'Seleccione el tipo de parámetro',
                           icon: const Icon(Icons.sensors),
                         ),
                         value: selectedTipoParametro,

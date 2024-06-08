@@ -10,19 +10,23 @@ String tipoParametroToJson(List<TipoParametro> data) =>
 class TipoParametro {
   int id;
   String descripcion;
+  bool estado;
 
   TipoParametro({
     required this.id,
     required this.descripcion,
+    required this.estado,
   });
 
   factory TipoParametro.fromJson(Map<String, dynamic> json) => TipoParametro(
         id: json["Id"],
         descripcion: json["Descripcion"],
+        estado: json["estado"],
       );
 
   Map<String, dynamic> toJson() => {
         "Id": id,
         "Descripcion": descripcion,
+        "estado": estado,
       };
 }

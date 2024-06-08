@@ -92,8 +92,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           autocorrect: false,
                           controller: txtCedula,
                           decoration: InputDecorations.inputDecoration(
-                            hintText: '00000000',
-                            labelText: '# Cedula',
+                            hintText: '########',
+                            labelText: '# Cédula',
                             icon: const Icon(Icons.assignment_ind_outlined),
                           ),
                           validator: (value) {
@@ -101,7 +101,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             RegExp regExp = RegExp(pattern);
                             return regExp.hasMatch(value ?? '')
                                 ? null
-                                : '# Cedula no valido';
+                                : '# Cédula no valido';
                           },
                         ),
                         const SizedBox(
@@ -126,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 12),
-                            child: const Text('Comfirmar ',
+                            child: const Text('Confirmar ',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18)),
                           ),

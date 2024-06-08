@@ -10,10 +10,11 @@ class AnalisisScreen extends StatefulWidget {
 
 class _AnalisisScreenState extends State<AnalisisScreen> {
   late TextEditingController _txtFechaHoraController;
-  var txtEmail = TextEditingController();
+  var txtInformacion = TextEditingController();
   var txtSensor = TextEditingController();
   var txtParametro = TextEditingController();
   String? selectedTipoParametro;
+  String? selectedFinca;
 
   @override
   void initState() {
@@ -28,7 +29,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
   @override
   void dispose() {
     _txtFechaHoraController.dispose();
-    txtEmail.dispose();
+    txtInformacion.dispose();
     txtSensor.dispose();
     txtParametro.dispose();
     super.dispose();
@@ -70,42 +71,6 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
               child: Text('Opciones'),
             ),
             ListTile(
-              title: const Text('Menu principal'),
-              onTap: () {
-                Navigator.pushNamed(context, 'home');
-              },
-            ),
-            ListTile(
-              title: const Text('parametro sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'para_sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Tipo de sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'tipo_sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Sensor'),
-              onTap: () {
-                Navigator.pushNamed(context, 'sensor');
-              },
-            ),
-            ListTile(
-              title: const Text('Tipo de parámetro'),
-              onTap: () {
-                Navigator.pushNamed(context, 'tipo_parametro');
-              },
-            ),
-            ListTile(
-              title: const Text('Parámetros'),
-              onTap: () {
-                Navigator.pushNamed(context, 'parametros');
-              },
-            ),
-            ListTile(
               title: const Text('Salir'),
               onTap: () {
                 Navigator.pushNamed(context, 'login');
@@ -124,9 +89,13 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
     var tipoSensor = usuarioProvider.tipoSensor;
     var tipoPara = usuarioProvider.tipoParametro;
 
+    var finca = usuarioProvider.fincas;
+
     List<String> tipoParaSensorStrings = tipoParaSensor
         .map((paraSensor) => paraSensor.idparaSensor.toString())
         .toList();
+    List<String> fincasStrings =
+        finca.map((finca) => finca.nombreFinca).toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -165,7 +134,7 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                     children: [
                       TextFormField(
                         autocorrect: false,
-                        controller: txtEmail,
+                        controller: txtInformacion,
                         decoration: InputDecorations.inputDecoration(
                           hintText: 'sirve para *****',
                           labelText: 'Información del agua',
@@ -203,6 +172,27 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                               });
                             }
                           }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecorations.inputDecoration(
+                          hintText: 'Seleccione la finca',
+                          labelText: 'Finca',
+                          icon: const Icon(Icons.sensors),
+                        ),
+                        items: fincasStrings.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedFinca = newValue;
+                          });
                         },
                       ),
                       const SizedBox(
@@ -262,7 +252,41 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                             ),
                             disabledColor: Colors.grey,
                             color: Colors.deepPurple,
-                            onPressed: () async {},
+                            onPressed: () async {
+                              if (selectedFinca == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Seleccione la finca'),
+                                  ),
+                                );
+                                return;
+                              } else if (txtInformacion.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Ingrese la información del agua'),
+                                  ),
+                                );
+                                return;
+                              } else {
+                                usuarioProvider.llamarArduino(
+                                    _txtFechaHoraController.text,
+                                    selectedFinca!,
+                                    txtInformacion.text,
+                                    usuarioProvider.usuario.email,
+                                    usuarioProvider.usuario.nombre_1,
+                                    usuarioProvider.usuario.lastName_1);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Analisis enviados correctamente al correo registrado'),
+                                  ),
+                                );
+                                txtInformacion.clear();
+                                selectedFinca = null;
+                                selectedTipoParametro = null;
+                              }
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 12),
@@ -278,29 +302,6 @@ class _AnalisisScreenState extends State<AnalisisScreen> {
                           ),
                         ],
                       ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // RichText(
-                      //   text: TextSpan(
-                      //     text: '¿Deseas eliminar?',
-                      //     style: const TextStyle(
-                      //         color: Colors.black, fontSize: 15),
-                      //     children: [
-                      //       TextSpan(
-                      //         text: ' Click aquí',
-                      //         style: const TextStyle(
-                      //             color: Colors.blue, fontSize: 18),
-                      //         recognizer: TapGestureRecognizer()
-                      //           ..onTap = () {
-                      //             usuarioProvider.tipoSensor;
-                      //             Navigator.pushReplacementNamed(
-                      //                 context, 'eliminar_tss');
-                      //           },
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

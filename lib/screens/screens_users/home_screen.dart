@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              title: const Text('parametro sensor'),
+              title: const Text('Parámetro sensor'),
               onTap: () {
                 Navigator.pushNamed(context, 'para_sensor');
               },

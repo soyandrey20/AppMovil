@@ -201,7 +201,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
                   for (var i = 0; i < users.length; i++) {
                     if (users[i].cedula == txtCedula.text) {
                       existingAcount = 0;
-                      usuarioProvider.getUser(users[i].cedula);
+                      usuarioProvider.getPersona(users[i].cedula);
                       break;
                     } else {
                       existingAcount;
@@ -240,7 +240,7 @@ class _InformationScreenAdminState extends State<InformationScreenAdmin> {
     for (var i = 0; i < users.length; i++) {
       if (users[i].cedula == txtCedula.text) {
         existingAcount = 0;
-        usuarioProvider.getUser(users[i].cedula);
+        usuarioProvider.getPersona(users[i].cedula);
         break;
       } else {
         existingAcount;
